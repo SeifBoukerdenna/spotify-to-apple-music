@@ -11,9 +11,9 @@ import PlaylistItem from './PlaylistItem';
 import SortingFilteringControls from './SortingFilteringControls';
 import UserInfo from './UserInfo';
 
-
 const Home = () => {
     const [token, setToken] = useState<string | null>(null);
+    const [authError, setAuthError] = useState<string | null>(null); // Error state
     const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
     const RESPONSE_TYPE = 'token';
     const SCOPE =
@@ -27,8 +27,9 @@ const Home = () => {
     const [sortOption, setSortOption] = useState<'name' | 'tracks' | 'none'>('none');
 
     useEffect(() => {
-        // Check for access token in URL
+        // Check for access token in URL hash or error in URL query parameters
         const hash = window.location.hash;
+        const search = window.location.search;
         let accessToken = window.localStorage.getItem('spotify_access_token');
 
         if (!accessToken && hash) {
@@ -40,6 +41,15 @@ const Home = () => {
             }
         } else if (accessToken) {
             setToken(accessToken);
+        }
+
+        if (search) {
+            const error = new URLSearchParams(search).get('error');
+            if (error) {
+                setAuthError(error);
+                // Clear the search parameters to clean up the URL
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
         }
     }, []);
 
@@ -157,7 +167,16 @@ const Home = () => {
             </header>
             <div className="container">
                 {!token ? (
-                    <button onClick={handleLogin}>Log in with Spotify</button>
+                    <>
+                        {authError ? (
+                            <div className="error-message">
+                                <p>Error during authentication: {authError}</p>
+                                <button onClick={handleLogin}>Try logging in again</button>
+                            </div>
+                        ) : (
+                            <button onClick={handleLogin}>Log in with Spotify</button>
+                        )}
+                    </>
                 ) : (
                     <button onClick={handleLogout}>Log out</button>
                 )}
@@ -174,7 +193,7 @@ const Home = () => {
                         <h2>Your Playlists</h2>
 
                         {/* Sorting and Filtering Controls */}
-                        <SortingFilteringControls
+                        <SortingFilteringControls<'name' | 'tracks' | 'none'>
                             searchTerm={searchTerm}
                             setSearchTerm={setSearchTerm}
                             sortOption={sortOption}
