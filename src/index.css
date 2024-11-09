@@ -85,3 +85,39 @@ a:hover {
     flex: 1 1 100%;
   }
 }
+
+/* Styles for input and select elements */
+input[type="text"],
+select {
+  background-color: #2a2a2a;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 5px;
+  color: #fff;
+  font-size: 1rem;
+}
+
+input[type="text"]::placeholder {
+  color: #bbb;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" fill="%23fff" viewBox="0 0 4 5"><path d="M2 0L0 2h4z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 8px 10px;
+}
+
+input[type="text"]:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #1db954;
+}
+
+label {
+  font-size: 1rem;
+  color: #fff;
+}
