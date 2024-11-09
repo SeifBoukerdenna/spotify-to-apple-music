@@ -1,2 +1,4 @@
-export const SPOTIFY_CLIENT_ID = "779af533dfa84284835fb5c01fdec720";
-export const REDIRECT_URI = "http://localhost:5173/";
+// src/config.ts
+export const SPOTIFY_CLIENT_ID = import.meta.env.VITE_SPOTIFY_CLIENT_ID;
+export const REDIRECT_URI = import.meta.env.VITE_REDIRECT_URI;
+export const SPOTIFY_CLIENT_SECRET = import.meta.env.VITE_SPOTIFY_CLIENT_SECRET;
