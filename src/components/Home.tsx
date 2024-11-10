@@ -1,140 +1,55 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
-import { SPOTIFY_CLIENT_ID, REDIRECT_URI } from '../config';
 import { Playlist } from '../interfaces/Playlist.interface';
 import { SpotifyUser } from '../interfaces/SpotifyUser.interface';
 import LoadingSpinner from './LoadingSpinner';
 import PlaylistItem from './PlaylistItem';
 import SortingFilteringControls from './SortingFilteringControls';
 import UserInfo from './UserInfo';
+import { useSpotifyToken } from '../hooks/useSpotifyToken';
+import { useSpotifyQuery } from '../hooks/useSpotifyQuery';
+import { useSpotifyInfiniteQuery } from '../hooks/useSpotifyInfiniteQuery';
+import FileSaver from 'file-saver';
+import { Parser } from '@json2csv/plainjs';
+import { fetchAllPlaylistTracks } from '../hooks/fetchAllPlaylistTracks';
+import { fetchAllLikedSongs } from '../hooks/fetchAllLikedSongs';
 
 const Home = () => {
-    const [token, setToken] = useState<string | null>(null);
-    const [authError, setAuthError] = useState<string | null>(null); // Error state
-    const AUTH_ENDPOINT = 'https://accounts.spotify.com/authorize';
-    const RESPONSE_TYPE = 'token';
-    const SCOPE =
-        'user-read-private user-read-email user-top-read user-read-recently-played user-library-read playlist-read-private playlist-read-collaborative';
-
+    const { token, authError, handleLogin, handleLogout } = useSpotifyToken();
     const navigate = useNavigate();
 
-    // State for sorting and filtering playlists
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
     const [sortOption, setSortOption] = useState<'name' | 'tracks' | 'none'>('none');
 
-    useEffect(() => {
-        // Check for access token in URL hash or error in URL query parameters
-        const hash = window.location.hash;
-        const search = window.location.search;
-        let accessToken = window.localStorage.getItem('spotify_access_token');
-
-        if (!accessToken && hash) {
-            accessToken = new URLSearchParams(hash.substring(1)).get('access_token');
-            window.location.hash = '';
-            if (accessToken) {
-                window.localStorage.setItem('spotify_access_token', accessToken);
-                setToken(accessToken);
-            }
-        } else if (accessToken) {
-            setToken(accessToken);
-        }
-
-        if (search) {
-            const error = new URLSearchParams(search).get('error');
-            if (error) {
-                setAuthError(error);
-                // Clear the search parameters to clean up the URL
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-        }
-    }, []);
-
-    const handleLogin = () => {
-        const authUrl = `${AUTH_ENDPOINT}?client_id=${SPOTIFY_CLIENT_ID}&redirect_uri=${encodeURIComponent(
-            REDIRECT_URI
-        )}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPE)}`;
-        window.location.href = authUrl;
-    };
-
-    const handleLogout = () => {
-        setToken(null);
-        window.localStorage.removeItem('spotify_access_token');
-        window.location.reload();
-    };
-
-    // Fetch user data using React Query
     const {
         data: user,
         isLoading: isUserLoading,
         error: userError,
-    } = useQuery<SpotifyUser, Error>({
-        queryKey: ['user'],
-        queryFn: async () => {
-            const response = await axios.get<SpotifyUser>('https://api.spotify.com/v1/me', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            return response.data;
-        },
-        enabled: !!token,
-    });
+    } = useSpotifyQuery<SpotifyUser>(
+        token,
+        'https://api.spotify.com/v1/me',
+        'user',
+        !!token
+    );
 
-    // Fetch playlists using React Query
     const {
-        data: playlistsData,
+        items: playlists,
         isLoading: arePlaylistsLoading,
         error: playlistsError,
         fetchNextPage: fetchNextPlaylistsPage,
         hasNextPage: hasMorePlaylists,
         isFetchingNextPage: isFetchingNextPlaylistsPage,
-    } = useInfiniteQuery<{
-        items: Playlist[];
-        next: string | null;
-    }, Error>({
-        queryKey: ['playlists'],
-        queryFn: async ({ pageParam = 0 }) => {
-            const limit = 50;
-            const offset = pageParam;
-            const response = await axios.get<{
-                items: Playlist[];
-                total: number;
-                next: string | null;
-            }>(
-                `https://api.spotify.com/v1/me/playlists?limit=${limit}&offset=${offset}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
+    } = useSpotifyInfiniteQuery<Playlist, Playlist>(
+        token,
+        'https://api.spotify.com/v1/me/playlists',
+        'playlists',
+        50,
+        !!token,
+        0
+    );
 
-            return {
-                items: response.data.items,
-                next: response.data.next,
-            };
-        },
-        getNextPageParam: (lastPage) => {
-            if (lastPage.next) {
-                const url = new URL(lastPage.next);
-                const offsetParam = url.searchParams.get('offset');
-                return offsetParam ? parseInt(offsetParam, 10) : undefined;
-            } else {
-                return undefined;
-            }
-        },
-        enabled: !!token,
-        initialPageParam: 0,
-    });
-
-    // Combine pages of data
-    const playlists = React.useMemo(() => playlistsData?.pages.flatMap((page) => page.items) || [], [playlistsData]);
-
-    // Effect to load more data when search yields no results
     useEffect(() => {
         if (
             !arePlaylistsLoading &&
@@ -147,7 +62,6 @@ const Home = () => {
             );
 
             if (filteredPlaylists.length === 0) {
-                // Fetch more pages if available
                 fetchNextPlaylistsPage();
             }
         }
@@ -159,6 +73,58 @@ const Home = () => {
         hasMorePlaylists,
         fetchNextPlaylistsPage,
     ]);
+
+    // Download metadata for a playlist
+    const handleDownload = async (playlist: Playlist) => {
+        try {
+            const allTracks = await fetchAllPlaylistTracks(playlist.id, token);
+            // Map to universally accepted metadata
+            const tracksData = allTracks.map((item) => {
+                const track = item.track;
+                return {
+                    song: track.name,
+                    artist: track.artists.map((a) => a.name).join(', '),
+                    album: track.album.name,
+                    year: track.album.release_date ? track.album.release_date.slice(0, 4) : '',
+                };
+            });
+
+            const json2csvParser = new Parser();
+            const csvData = json2csvParser.parse(tracksData);
+
+            const blob = new Blob([csvData], {
+                type: 'text/csv;charset=utf-8',
+            });
+            FileSaver.saveAs(blob, `${playlist.name}-metadata.csv`);
+        } catch (error) {
+            console.error('Error fetching playlist tracks:', error);
+            alert('Failed to download playlist metadata.');
+        }
+    };
+
+    // Download metadata for Liked Songs
+    const handleDownloadLikedSongs = async () => {
+        try {
+            const allLikedSongs = await fetchAllLikedSongs(token);
+            const tracksData = allLikedSongs.map((track) => ({
+                song: track.name,
+                artist: track.artists.map((a) => a.name).join(', '),
+                album: track.album.name,
+                year: track.album.release_date ? track.album.release_date.slice(0, 4) : '',
+            }));
+
+            const json2csvParser = new Parser();
+            const csvData = json2csvParser.parse(tracksData);
+
+            const blob = new Blob([csvData], {
+                type: 'text/csv;charset=utf-8',
+            });
+            FileSaver.saveAs(blob, `Liked-Songs-metadata.csv`);
+        } catch (error) {
+            console.error('Error fetching liked songs:', error);
+            alert('Failed to download liked songs metadata.');
+        }
+    };
 
     return (
         <>
@@ -185,14 +151,12 @@ const Home = () => {
                 {userError && <p>Error fetching user information.</p>}
                 {user && <UserInfo user={user} />}
 
-                {/* Display Playlists */}
                 {arePlaylistsLoading && <LoadingSpinner />}
                 {playlistsError && <p>Error fetching playlists.</p>}
                 {playlists && (
                     <div className="additional-info">
                         <h2>Your Playlists</h2>
 
-                        {/* Sorting and Filtering Controls */}
                         <SortingFilteringControls<'name' | 'tracks' | 'none'>
                             searchTerm={searchTerm}
                             setSearchTerm={setSearchTerm}
@@ -207,12 +171,7 @@ const Home = () => {
                         />
 
                         <div className="info-grid">
-                            {/* Liked Songs Playlist */}
-                            <div
-                                className="info-item"
-                                style={{ cursor: 'pointer', textAlign: 'center' }}
-                                onClick={() => navigate('/liked-songs')}
-                            >
+                            <div className="info-item" style={{ textAlign: 'center' }}>
                                 <div
                                     style={{
                                         width: '100%',
@@ -222,14 +181,18 @@ const Home = () => {
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
+                                        cursor: 'pointer',
                                     }}
+                                    onClick={() => navigate('/liked-songs')}
                                 >
                                     <p style={{ fontSize: '1.5rem', color: '#fff' }}>
                                         <strong>Liked Songs</strong>
                                     </p>
                                 </div>
+                                <button onClick={handleDownloadLikedSongs}>
+                                    Download Metadata
+                                </button>
                             </div>
-                            {/* User's Playlists */}
                             {playlists
                                 .filter((playlist) =>
                                     playlist.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -244,11 +207,14 @@ const Home = () => {
                                     }
                                 })
                                 .map((playlist) => (
-                                    <PlaylistItem key={playlist.id} playlist={playlist} />
+                                    <PlaylistItem
+                                        key={playlist.id}
+                                        playlist={playlist}
+                                        onDownload={handleDownload}
+                                    />
                                 ))}
                         </div>
 
-                        {/* Load More Button */}
                         {hasMorePlaylists && (
                             <div style={{ textAlign: 'center', marginTop: '1rem' }}>
                                 <button

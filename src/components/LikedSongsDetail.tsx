@@ -63,7 +63,15 @@ const LikedSongsDetail = () => {
 
     // Download metadata for a single track
     const handleDownload = (track: Track) => {
-        const blob = new Blob([JSON.stringify(track, null, 2)], {
+        const trackData = {
+            song: track.name,
+            artist: track.artists.map((a) => a.name).join(', '),
+            album: track.album.name,
+            year: track.album.release_date ? track.album.release_date.slice(0, 4) : '',
+        };
+
+        const jsonData = JSON.stringify(trackData, null, 2);
+        const blob = new Blob([jsonData], {
             type: 'application/json;charset=utf-8',
         });
         FileSaver.saveAs(blob, `${track.name}-metadata.json`);

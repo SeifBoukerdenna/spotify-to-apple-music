@@ -63,6 +63,34 @@ h1 {
 
 .info-item {
   flex: 1 1 calc(25% - 1rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.info-item img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.info-item p {
+  margin: 0.5rem 0;
+}
+
+.info-item button {
+  background-color: #1db954;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.info-item button:hover {
+  background-color: #1ed760;
 }
 
 a {
