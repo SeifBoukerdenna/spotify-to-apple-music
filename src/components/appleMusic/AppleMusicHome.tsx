@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import './AppleMusicStyles.css';
+import '../../styles/appleMusicStyles.css';
 import { useMusicKit } from '../../hooks/useMusicKit';
 
 const AppleMusicHome = () => {

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { APPLE_DEVELOPER_TOKEN } from "../config";
+import { VITE_APPLE_DEVELOPER_TOKEN } from "../config";
 
 declare global {
   interface Window {
@@ -12,10 +12,12 @@ export const useMusicKit = () => {
     useState<MusicKit.MusicKitInstance | null>(null);
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
+  console.log("Apple Developer Token:", VITE_APPLE_DEVELOPER_TOKEN);
+
   useEffect(() => {
     const initializeMusicKit = async () => {
       await window.MusicKit.configure({
-        developerToken: APPLE_DEVELOPER_TOKEN,
+        developerToken: VITE_APPLE_DEVELOPER_TOKEN,
         app: {
           name: "Your App Name",
           build: "1.0.0",
