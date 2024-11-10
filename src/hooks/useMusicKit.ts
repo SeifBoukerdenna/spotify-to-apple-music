@@ -12,8 +12,6 @@ export const useMusicKit = () => {
     useState<MusicKit.MusicKitInstance | null>(null);
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
 
-  console.log("Apple Developer Token:", VITE_APPLE_DEVELOPER_TOKEN);
-
   useEffect(() => {
     const initializeMusicKit = async () => {
       await window.MusicKit.configure({
