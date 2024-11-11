@@ -6,6 +6,34 @@ const RESPONSE_TYPE = "token";
 const SCOPE =
   "user-read-private user-read-email user-top-read user-read-recently-played user-library-read playlist-read-private playlist-read-collaborative";
 
+/**
+ * Custom React hook for managing Spotify OAuth authentication.
+ *
+ * This hook manages the Spotify access token, handling login and logout actions.
+ * It checks the URL for an access token on load and stores it in local storage
+ * if available, enabling automatic login persistence across sessions.
+ *
+ * @returns {Object} An object containing the Spotify access token, any authorization error, and login/logout handlers.
+ * @property {string | null} token - The current Spotify access token, or null if not authenticated.
+ * @property {string | null} authError - Any error encountered during authentication, or null if none.
+ * @property {function} handleLogin - Initiates the Spotify login flow by redirecting to the Spotify authorization endpoint.
+ * @property {function} handleLogout - Logs the user out by clearing the access token and reloading the page.
+ *
+ * @example
+ * const { token, authError, handleLogin, handleLogout } = useSpotifyToken();
+ *
+ * if (!token) {
+ *   return <button onClick={handleLogin}>Login to Spotify</button>;
+ * }
+ *
+ * return (
+ *   <div>
+ *     <p>Authenticated with Spotify!</p>
+ *     <button onClick={handleLogout}>Logout</button>
+ *     {authError && <p>Error: {authError}</p>}
+ *   </div>
+ * );
+ */
 export const useSpotifyToken = () => {
   const [token, setToken] = useState<string | null>(null);
   const [authError, setAuthError] = useState<string | null>(null);

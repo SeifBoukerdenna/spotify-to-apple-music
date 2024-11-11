@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Playlist } from '../interfaces/Playlist.interface';
+import { Playlist } from '../../interfaces/Playlist.interface';
 
 interface PlaylistItemProps {
     playlist: Playlist;

@@ -1,6 +1,23 @@
 import axios from "axios";
 import { SavedTrackItem } from "../interfaces/SavedTrack.interface";
 
+/**
+ * Fetches all liked songs for a user from the Spotify API.
+ *
+ * This function retrieves all saved tracks from a user's Spotify account
+ * by making paginated requests, handling up to 50 tracks per request,
+ * and continuing until all tracks are collected.
+ *
+ * @param {string | null} token - The authentication token for the Spotify API.
+ * @throws {Error} If the token is not provided.
+ * @returns {Promise<SavedTrackItem[]>} A promise that resolves to an array of liked tracks.
+ *
+ * @example
+ * const token = "your_spotify_token";
+ * fetchAllLikedSongs(token)
+ *   .then((tracks) => console.log(tracks))
+ *   .catch((error) => console.error(error));
+ */
 export const fetchAllLikedSongs = async (token: string | null) => {
   if (!token) throw new Error("No token available");
 

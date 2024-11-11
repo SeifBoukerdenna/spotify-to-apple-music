@@ -1,4 +1,4 @@
-import { SpotifyUser } from '../interfaces/SpotifyUser.interface';
+import { SpotifyUser } from '../../interfaces/SpotifyUser.interface';
 
 interface UserInfoProps {
     user: SpotifyUser;

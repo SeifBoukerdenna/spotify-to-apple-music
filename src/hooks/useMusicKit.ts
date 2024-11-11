@@ -6,6 +6,27 @@ declare global {
   }
 }
 
+/**
+ * Custom React hook to initialize and manage the Apple MusicKit SDK instance.
+ *
+ * This hook fetches a developer token, configures the MusicKit instance,
+ * and provides methods to handle authorization and unauthorization actions.
+ * It also checks and sets the initial authorization state.
+ *
+ * @returns {Object} The MusicKit instance and authorization status, with functions for authorizing and unauthorizing.
+ * @property {MusicKit.MusicKitInstance | null} musicKitInstance - The configured MusicKit instance, or null if not yet initialized.
+ * @property {boolean} isAuthorized - A flag indicating whether the user is authorized with Apple Music.
+ * @property {function} handleAuthorize - A function to manually authorize the user with MusicKit.
+ * @property {function} handleUnauthorize - A function to unauthorize the user with MusicKit.
+ *
+ * @example
+ * const { musicKitInstance, isAuthorized, handleAuthorize, handleUnauthorize } = useMusicKit();
+ * if (isAuthorized) {
+ *   // Access authorized Apple Music features
+ * } else {
+ *   handleAuthorize(); // Prompt for authorization
+ * }
+ */
 export const useMusicKit = () => {
   const [musicKitInstance, setMusicKitInstance] =
     useState<MusicKit.MusicKitInstance | null>(null);

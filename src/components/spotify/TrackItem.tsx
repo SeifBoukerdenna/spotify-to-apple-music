@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Track } from '../interfaces/Track.interface';
+import { Track } from '../../interfaces/Track.interface';
 
 interface TrackItemProps {
     track: Track;

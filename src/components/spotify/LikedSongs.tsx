@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDebounce } from 'use-debounce';
-import { SavedTrackItem } from '../interfaces/SavedTrack.interface';
-import { Track } from '../interfaces/Track.interface';
+import { SavedTrackItem } from '../../interfaces/SavedTrack.interface';
+import { Track } from '../../interfaces/Track.interface';
 import LoadingSpinner from './LoadingSpinner';
 import SortingFilteringControls from './SortingFilteringControls';
 import TrackItem from './TrackItem';
-import { useSpotifyToken } from '../hooks/useSpotifyToken';
-import { useSpotifyInfiniteQuery } from '../hooks/useSpotifyInfiniteQuery';
+import { useSpotifyToken } from '../../hooks/useSpotifyToken';
+import { useSpotifyInfiniteQuery } from '../../hooks/useSpotifyInfiniteQuery';
 import FileSaver from 'file-saver';
 
 const LikedSongsDetail = () => {
