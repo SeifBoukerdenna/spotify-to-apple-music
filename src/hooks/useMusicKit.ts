@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { API_URL } from "../config";
 
 declare global {
   interface Window {
@@ -35,9 +36,7 @@ export const useMusicKit = () => {
   useEffect(() => {
     const initializeMusicKit = async () => {
       try {
-        const response = await fetch(
-          "https://spotify-apple-music-backend.onrender.com/getDeveloperToken"
-        );
+        const response = await fetch(`${API_URL}getDeveloperToken`);
         if (!response.ok) {
           throw new Error("Failed to fetch developer token");
         }

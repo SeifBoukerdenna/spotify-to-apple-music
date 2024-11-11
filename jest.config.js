@@ -11,7 +11,10 @@ export default {
     },
     setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
     transform: {
-        '^.+\\.(ts|tsx)?$': ['ts-jest', { diagnostics: { ignoreCodes: ['TS151001'] } }],
+        '^.+\\.(ts|tsx)?$': ['ts-jest', {
+            tsconfig: 'tsconfig.test.json', // Point to your test tsconfig
+            diagnostics: { ignoreCodes: ['TS151001'] }
+        }],
         "^.+\\.(js|jsx)$": "babel-jest",
     },
     testMatch: ['**/*.spec.ts', '**/*.spec.tsx'],
