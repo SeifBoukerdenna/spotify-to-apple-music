@@ -1,4 +1,3 @@
-// src/utils/fetchAllPlaylistTracks.ts
 import axios from "axios";
 import { PlaylistTrack } from "../interfaces/PlaylistTrack.interface";
 

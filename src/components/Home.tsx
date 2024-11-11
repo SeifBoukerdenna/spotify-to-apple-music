@@ -12,8 +12,8 @@ import { useSpotifyQuery } from '../hooks/useSpotifyQuery';
 import { useSpotifyInfiniteQuery } from '../hooks/useSpotifyInfiniteQuery';
 import FileSaver from 'file-saver';
 import { Parser } from '@json2csv/plainjs';
-import { fetchAllPlaylistTracks } from '../hooks/fetchAllPlaylistTracks';
-import { fetchAllLikedSongs } from '../hooks/fetchAllLikedSongs';
+import { fetchAllPlaylistTracks } from '../fetch/fetchAllPlaylistTracks';
+import { fetchAllLikedSongs } from '../fetch/fetchAllLikedSongs';
 
 const Home = () => {
     const { token, authError, handleLogin, handleLogout } = useSpotifyToken();

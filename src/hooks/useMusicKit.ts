@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { VITE_APPLE_DEVELOPER_TOKEN } from "../config";
 
 declare global {
   interface Window {
@@ -14,25 +13,38 @@ export const useMusicKit = () => {
 
   useEffect(() => {
     const initializeMusicKit = async () => {
-      await window.MusicKit.configure({
-        developerToken: VITE_APPLE_DEVELOPER_TOKEN,
-        app: {
-          name: "Your App Name",
-          build: "1.0.0",
-        },
-      });
-
-      const music = window.MusicKit.getInstance();
-      setMusicKitInstance(music);
-      setIsAuthorized(music.isAuthorized);
-
-      if (!music.isAuthorized) {
-        try {
-          await music.authorize();
-          setIsAuthorized(true);
-        } catch (error) {
-          console.error("Authorization failed:", error);
+      try {
+        const response = await fetch(
+          "https://spotify-apple-music-backend.onrender.com/getDeveloperToken"
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch developer token");
         }
+        const data = await response.json();
+        const developerToken = data.token;
+
+        await window.MusicKit.configure({
+          developerToken,
+          app: {
+            name: "Your App Name",
+            build: "1.0.0",
+          },
+        });
+
+        const music = window.MusicKit.getInstance();
+        setMusicKitInstance(music);
+        setIsAuthorized(music.isAuthorized);
+
+        if (!music.isAuthorized) {
+          try {
+            await music.authorize();
+            setIsAuthorized(true);
+          } catch (error) {
+            console.error("Authorization failed:", error);
+          }
+        }
+      } catch (error) {
+        console.error("Error initializing MusicKit:", error);
       }
     };
 
@@ -59,8 +71,12 @@ export const useMusicKit = () => {
 
   const handleUnauthorize = async () => {
     if (musicKitInstance) {
-      await musicKitInstance.unauthorize();
-      setIsAuthorized(false);
+      try {
+        await musicKitInstance.unauthorize();
+        setIsAuthorized(false);
+      } catch (error) {
+        console.error("Unauthorization failed:", error);
+      }
     }
   };
 

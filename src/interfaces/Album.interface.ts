@@ -12,5 +12,4 @@ export interface Album {
   type: string;
   external_urls: { spotify: string };
   artists: Artist[];
-  // Include other properties as needed
 }

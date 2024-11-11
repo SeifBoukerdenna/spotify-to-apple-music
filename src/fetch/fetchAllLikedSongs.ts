@@ -1,4 +1,3 @@
-// src/utils/fetchAllLikedSongs.ts
 import axios from "axios";
 import { SavedTrackItem } from "../interfaces/SavedTrack.interface";
 
@@ -7,7 +6,7 @@ export const fetchAllLikedSongs = async (token: string | null) => {
 
   let allTracks: SavedTrackItem[] = [];
   let offset = 0;
-  const limit = 50; // Maximum allowed by Spotify API
+  const limit = 50;
 
   while (true) {
     const response = await axios.get<{
@@ -29,6 +28,5 @@ export const fetchAllLikedSongs = async (token: string | null) => {
     offset += limit;
   }
 
-  // Map to only track metadata if needed
   return allTracks.map((item) => item.track);
 };
