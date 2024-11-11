@@ -1,20 +1,21 @@
-// src/App.tsx
-import { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './components/Home';
-import LikedSongsDetail from './components/LikedSongs';
-import './index.css';
-import AppleMusicHome from './components/appleMusic/AppleMusicHome';
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./components/Home";
+import LikedSongsDetail from "./components/LikedSongs";
+import "./index.css";
+import AppleMusicHome from "./components/appleMusic/AppleMusicHome";
+import { MusicMode } from "./enums/musicMode";
 
 const App = () => {
-  const [mode, setMode] = useState<'spotify' | 'appleMusic'>('spotify');
+  const [mode, setMode] = useState<MusicMode>(MusicMode.Spotify);
 
   const toggleMode = () => {
-    setMode((prevMode) => (prevMode === 'spotify' ? 'appleMusic' : 'spotify'));
+    setMode((prevMode) =>
+      prevMode === MusicMode.Spotify ? MusicMode.AppleMusic : MusicMode.Spotify,
+    );
   };
 
   useEffect(() => {
-    // Update the body class based on the mode
     document.body.className = mode;
   }, [mode]);
 
@@ -24,12 +25,13 @@ const App = () => {
         {/* Toggle Button */}
         <div className="mode-toggle">
           <button onClick={toggleMode}>
-            Switch to {mode === 'spotify' ? 'Apple Music' : 'Spotify'} Mode
+            Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}{" "}
+            Mode
           </button>
         </div>
         {/* Routes */}
         <Routes>
-          {mode === 'spotify' ? (
+          {mode === MusicMode.Spotify ? (
             <>
               <Route path="/" element={<Home />} />
               <Route path="/liked-songs" element={<LikedSongsDetail />} />
