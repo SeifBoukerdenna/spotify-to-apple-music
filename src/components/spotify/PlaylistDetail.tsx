@@ -4,7 +4,7 @@ import { useSpotifyToken } from '../../hooks/useSpotifyToken';
 import { usePlaylistDetails } from '../../hooks/usePlaylistDetails';
 import LoadingSpinner from './LoadingSpinner';
 import { PlaylistHeader } from '../header/PlaylistHeader';
-import { TrackGrid } from '../tracks/TrackGrid';
+import { TrackGrid } from '../tracks/TracksGrid';
 
 const PlaylistDetail = () => {
     const { id } = useParams<{ id: string }>();

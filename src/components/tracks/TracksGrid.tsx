@@ -1,6 +1,6 @@
 // components/tracks/TrackGrid.tsx
 import { Track } from '../../interfaces/Track.interface';
-import { TrackCard } from './TrackCard';
+import { TrackCard } from './tracksCard';
 
 interface TrackGridProps {
     tracks: Track[];

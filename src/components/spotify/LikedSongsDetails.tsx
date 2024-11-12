@@ -5,7 +5,7 @@ import { useLikedSongs } from "../../hooks/useLikedSongs";
 import { LikedSongsHeader } from "../header/LikedSongsHeader";
 import LoadingSpinner from "./LoadingSpinner";
 import SortingFilteringControls from "./SortingFilteringControls";
-import { TrackGrid } from "../tracks/TrackGrid";
+import { TrackGrid } from "../track/TrackGrid";
 
 // LikedSongsDetail.tsx
 const LikedSongsDetail = () => {
