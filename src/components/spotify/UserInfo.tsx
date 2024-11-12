@@ -11,15 +11,23 @@ const UserInfo = ({ user }: UserInfoProps) => (
         </h2>
 
         {user.images && user.images.length > 0 && (
-            <img
-                src={user.images[0].url}
-                alt="Profile"
-                className="w-24 h-24 rounded-full mx-auto mb-4 border-2 border-green-500"
-            />
+            <a
+                href={user.external_urls.spotify}
+                target="_blank"
+                rel="noreferrer"
+                className="block w-24 h-24 mx-auto mb-4 rounded-full border-2 border-green-500 overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-lg"
+                title="Go to Spotify profile"
+            >
+                <img
+                    src={user.images[0].url}
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                />
+            </a>
         )}
 
         <p className="my-2">
-            <strong>Email:</strong> {user.email}
+            {user.email}
         </p>
         <p className="my-2">
             <strong>Country:</strong> {user.country}
@@ -28,14 +36,13 @@ const UserInfo = ({ user }: UserInfoProps) => (
             <strong>Followers:</strong> {user.followers.total}
         </p>
         <p className="my-2">
-            <strong>Spotify Profile:</strong>{' '}
             <a
                 href={user.external_urls.spotify}
                 target="_blank"
                 rel="noreferrer"
                 className="text-green-500 font-bold hover:underline"
             >
-                {user.external_urls.spotify}
+                Visit Spotify Profile
             </a>
         </p>
     </div>
