@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./components/spotify/Home";
 import LikedSongsDetail from "./components/spotify/LikedSongs";
+import { FaSpotify, FaApple } from "react-icons/fa";
 import "./index.css";
 import AppleMusicHome from "./components/appleMusic/AppleMusicHome";
 import { MusicMode } from "./enums/musicMode";
@@ -27,12 +28,20 @@ const App = () => {
         <div className="fixed top-4 right-4 z-50">
           <button
             onClick={toggleMode}
-            className={`px-4 py-2 rounded-full transition-colors duration-300 ${mode === MusicMode.AppleMusic
-              ? "bg-green-500 text-white hover:bg-green-400"
-              : "bg-red-500 text-white hover:bg-red-400"
+            className={`flex items-center gap-2 px-5 py-2 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105
+              ${mode === MusicMode.Spotify
+                ? "bg-gradient-to-r from-pink-500 to-red-500 text-white hover:from-pink-400 hover:to-red-400"
+                : "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:from-green-400 hover:to-teal-400"
               }`}
           >
-            Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}
+            {mode === MusicMode.Spotify ? (
+              <FaApple className="text-xl" />
+            ) : (
+              <FaSpotify className="text-xl" />
+            )}
+            <span className="font-semibold">
+              Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}
+            </span>
           </button>
         </div>
         <Routes>
