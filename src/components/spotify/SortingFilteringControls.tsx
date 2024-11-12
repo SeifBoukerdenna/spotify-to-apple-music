@@ -15,60 +15,46 @@ const SortingFilteringControls = <T extends string>({
     sortOptions,
     placeholder,
 }: SortingFilteringControlsProps<T>): JSX.Element => (
-    <div style={{
-        marginBottom: '1rem',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '1rem',
-        backgroundColor: '#282828',
-        padding: '10px 15px',
-        borderRadius: '8px',
-    }}>
+    <div className="mb-4 flex items-center gap-4 bg-gray-800 p-3 rounded-lg">
         <input
             type="text"
             placeholder={placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-                flex: '1',
-                backgroundColor: '#333',
-                color: '#FFF',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                padding: '8px',
-                fontSize: '1rem',
-                outline: 'none',
-            }}
+            className="flex-1 bg-gray-700 text-white border border-gray-600 rounded-md p-2 text-base focus:outline-none"
         />
 
-        <label htmlFor="sort" style={{
-            color: '#B3B3B3',
-            fontSize: '0.9rem',
-        }}>
+        <label htmlFor="sort" className="text-gray-400 text-sm font-medium">
             Sort by:
         </label>
 
-        <select
-            id="sort"
-            value={sortOption}
-            onChange={(e) => setSortOption(e.target.value as T)}
-            style={{
-                backgroundColor: '#333',
-                color: '#FFF',
-                border: '1px solid #444',
-                borderRadius: '4px',
-                padding: '8px',
-                width: '150px',
-                fontSize: '1rem',
-                outline: 'none',
-            }}
-        >
-            {sortOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                    {option.label}
-                </option>
-            ))}
-        </select>
+        <div className="relative w-36">
+            <select
+                id="sort"
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value as T)}
+                className="appearance-none bg-gray-700 text-white border border-gray-600 rounded-md p-2 pr-8 w-full text-base focus:outline-none"
+            >
+                {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                        {option.label}
+                    </option>
+                ))}
+            </select>
+            <span className="absolute inset-y-0 right-2 flex items-center pointer-events-none">
+                <svg
+                    className="w-4 h-4 text-gray-400"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                >
+                    <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.939l3.71-3.71a.75.75 0 111.06 1.06l-4 4a.75.75 0 01-1.06 0l-4-4a.75.75 0 01.02-1.06z"
+                        clipRule="evenodd"
+                    />
+                </svg>
+            </span>
+        </div>
     </div>
 );
 

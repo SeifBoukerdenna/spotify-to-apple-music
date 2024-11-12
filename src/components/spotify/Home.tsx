@@ -124,74 +124,46 @@ const Home = () => {
     };
 
     return (
-        <div style={{
-            backgroundColor: '#121212',
-            color: '#FFFFFF',
-            minHeight: '100vh',
-            padding: '50px',
-            fontFamily: 'Arial, sans-serif',
-        }}>
-            <header style={{
-                textAlign: 'center',
-                paddingBottom: '20px',
-                borderBottom: '1px solid #282828',
-            }}>
-                <h1 style={{ fontSize: '2rem', color: '#FFFFFF' }}>Spotify Home</h1>
+        <div className="bg-gray-900 text-white min-h-screen p-12 font-sans">
+            <header className="text-center pb-5 border-b border-gray-700">
+                <h1 className="text-2xl">Spotify Home</h1>
                 {!token ? (
                     authError ? (
-                        <div style={{ color: 'red', textAlign: 'center' }}>
+                        <div className="text-red-500 text-center">
                             <p>Error during authentication: {authError}</p>
-                            <button onClick={handleLogin} style={{
-                                backgroundColor: '#1DB954',
-                                color: '#FFFFFF',
-                                borderRadius: '50px',
-                                padding: '10px 20px',
-                                border: 'none',
-                                cursor: 'pointer',
-                            }}>Try logging in again</button>
+                            <button onClick={handleLogin} className="bg-green-500 text-white rounded-full px-5 py-2 mt-2 cursor-pointer">
+                                Try logging in again
+                            </button>
                         </div>
                     ) : (
-                        <button onClick={handleLogin} style={{
-                            backgroundColor: '#1DB954',
-                            color: '#FFFFFF',
-                            borderRadius: '50px',
-                            padding: '10px 20px',
-                            border: 'none',
-                            cursor: 'pointer',
-                        }}>Log in with Spotify</button>
+                        <button onClick={handleLogin} className="bg-green-500 text-white rounded-full px-5 py-2 mt-2 cursor-pointer">
+                            Log in with Spotify
+                        </button>
                     )
                 ) : (
-                    <button onClick={handleLogout} style={{
-                        backgroundColor: '#1DB954',
-                        color: '#FFFFFF',
-                        borderRadius: '50px',
-                        padding: '10px 20px',
-                        border: 'none',
-                        cursor: 'pointer',
-                    }}>Log out</button>
+                    <button onClick={handleLogout} className="bg-green-500 text-white rounded-full px-5 py-2 mt-2 cursor-pointer">
+                        Log out
+                    </button>
                 )}
             </header>
 
             {isUserLoading && <LoadingSpinner />}
-            {userError && <p style={{ textAlign: 'center' }}>Error fetching user information.</p>}
+            {userError && <p className="text-center">Error fetching user information.</p>}
             {user && <UserInfo user={user} />}
 
-            {user && <div style={{ textAlign: 'center', margin: '20px 0' }}>
-                <button onClick={() => navigate('/create-playlist')} style={{
-                    backgroundColor: '#1DB954',
-                    color: '#FFFFFF',
-                    borderRadius: '50px',
-                    padding: '10px 20px',
-                    border: 'none',
-                    cursor: 'pointer',
-                }}>Create New Playlist</button>
-            </div>}
+            {user && (
+                <div className="text-center mt-5">
+                    <button onClick={() => navigate('/create-playlist')} className="bg-green-500 text-white rounded-full px-5 py-2 mt-2 cursor-pointer">
+                        Create New Playlist
+                    </button>
+                </div>
+            )}
 
             {arePlaylistsLoading && <LoadingSpinner />}
-            {playlistsError && <p style={{ textAlign: 'center' }}>Error fetching playlists.</p>}
+            {playlistsError && <p className="text-center">Error fetching playlists.</p>}
             {playlists && (
                 <div>
-                    <h2 style={{ textAlign: 'center', color: '#FFFFFF', fontSize: '1.5rem' }}>Your Playlists</h2>
+                    <h2 className="text-center text-xl mt-8">Your Playlists</h2>
 
                     <SortingFilteringControls<'name' | 'tracks' | 'none'>
                         searchTerm={searchTerm}
@@ -206,37 +178,29 @@ const Home = () => {
                         placeholder="Search playlists..."
                     />
 
-                    <div style={{
-                        display: 'flex',
-                        flexWrap: 'wrap',
-                        gap: '1rem',
-                        justifyContent: 'center',
-                        marginTop: '20px',
-                    }}>
-                        <div style={{
-                            width: '100%',
-                            maxWidth: '200px',
-                            height: '200px',
-                            backgroundColor: '#333',
-                            borderRadius: '10px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            color: '#FFFFFF',
-                            textAlign: 'center',
-                        }} onClick={() => navigate('/liked-songs')}>
-                            <p style={{ fontSize: '1.2rem' }}><strong>Liked Songs</strong></p>
-                        </div>
-                        <button onClick={handleDownloadLikedSongs} style={{
-                            backgroundColor: '#1DB954',
-                            color: '#FFFFFF',
-                            borderRadius: '10px',
-                            padding: '10px 20px',
-                            border: 'none',
-                            cursor: 'pointer',
-                            marginTop: '10px',
-                        }}>Download Liked Songs Metadata</button>
+                    <div className="flex flex-wrap gap-4 justify-center mt-4">
+                        {/* Liked Songs Item */}
+                        {user?.images && user.images.length > 0 && (
+                            <div
+                                className="w-full max-w-xs rounded-lg p-4 flex flex-col items-center text-center cursor-pointer bg-cover bg-center relative overflow-hidden transition-transform transform hover:scale-105"
+                                style={{
+                                    backgroundImage: `url(${user.images[0].url})`,
+                                }}
+                                onClick={() => navigate('/liked-songs')}
+                            >
+                                {/* Overlay */}
+                                <div className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-md rounded-lg"></div>
+
+                                {/* Content */}
+                                <div className="relative z-10 flex-1 flex items-center justify-center h-24">
+                                    <p className="text-xl font-bold">Liked Songs</p>
+                                </div>
+
+                                <button onClick={(e) => { e.stopPropagation(); handleDownloadLikedSongs(); }} className="relative z-10 bg-green-500 text-white rounded-lg px-4 py-2 cursor-pointer mt-3 w-full">
+                                    Download Liked Songs Metadata
+                                </button>
+                            </div>
+                        )}
 
                         {playlists.map((playlist) => (
                             <PlaylistItem
@@ -248,15 +212,8 @@ const Home = () => {
                     </div>
 
                     {hasMorePlaylists && (
-                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                            <button onClick={() => fetchNextPlaylistsPage()} disabled={isFetchingNextPlaylistsPage} style={{
-                                backgroundColor: '#1DB954',
-                                color: '#FFFFFF',
-                                borderRadius: '10px',
-                                padding: '10px 20px',
-                                border: 'none',
-                                cursor: isFetchingNextPlaylistsPage ? 'not-allowed' : 'pointer',
-                            }}>
+                        <div className="text-center mt-4">
+                            <button onClick={() => fetchNextPlaylistsPage()} disabled={isFetchingNextPlaylistsPage} className="bg-green-500 text-white rounded-lg px-4 py-2 cursor-pointer disabled:opacity-50">
                                 {isFetchingNextPlaylistsPage ? <LoadingSpinner size={20} /> : 'Load More'}
                             </button>
                         </div>

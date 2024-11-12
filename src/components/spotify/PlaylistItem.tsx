@@ -16,75 +16,37 @@ const PlaylistItem = ({ playlist, onDownload }: PlaylistItemProps) => {
     };
 
     return (
-        <div style={{
-            backgroundColor: '#282828',
-            padding: '20px',
-            borderRadius: '10px',
-            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
-            width: '200px',
-            textAlign: 'center',
-            transform: 'scale(1)',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-            cursor: 'pointer',
-        }}
-            onMouseEnter={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1.05)';
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.5)';
-            }}
-            onMouseLeave={(e) => {
-                (e.currentTarget as HTMLDivElement).style.transform = 'scale(1)';
-                (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
-            }}>
+        <div
+            className="bg-gray-800 p-5 rounded-lg shadow-md w-52 text-center transform transition-transform duration-300 ease-in-out hover:scale-105 hover:shadow-lg cursor-pointer"
+        >
             {playlist.images && playlist.images.length > 0 && (
                 <img
                     src={playlist.images[0].url}
                     alt={playlist.name}
-                    style={{
-                        width: '100%',
-                        borderRadius: '8px',
-                        marginBottom: '10px',
-                        transition: 'transform 0.3s ease',
-                    }}
+                    className="w-full rounded-md mb-3 transition-transform duration-300"
                 />
             )}
-            <p style={{
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-                color: '#FFFFFF',
-                margin: '10px 0 5px',
-            }}>
+            <p className="text-lg font-bold text-white mb-2">
                 {playlist.name}
             </p>
-            <p style={{
-                fontSize: '0.9rem',
-                color: '#B3B3B3',
-                margin: '5px 0',
-            }}>
+            <p className="text-sm text-gray-400 mb-2">
                 <strong>Total Tracks:</strong> {playlist.tracks.total}
             </p>
-            <p style={{
-                margin: '5px 0',
-                fontSize: '0.9rem',
-            }}>
-                <a href={playlist.external_urls.spotify} target="_blank" rel="noreferrer" style={{
-                    color: '#1DB954',
-                    textDecoration: 'none',
-                }}>
+            <p className="text-sm mb-3">
+                <a
+                    href={playlist.external_urls.spotify}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-green-500 hover:underline"
+                >
                     View on Spotify
                 </a>
             </p>
-            <button onClick={handleDownload} disabled={isDownloading} style={{
-                backgroundColor: isDownloading ? '#333' : '#1DB954',
-                color: '#FFFFFF',
-                padding: '8px 16px',
-                borderRadius: '20px',
-                border: 'none',
-                cursor: isDownloading ? 'not-allowed' : 'pointer',
-                fontSize: '0.9rem',
-                transition: 'background-color 0.3s ease',
-                width: '100%',
-                marginTop: '10px',
-            }}>
+            <button
+                onClick={handleDownload}
+                disabled={isDownloading}
+                className={`w-full py-2 rounded-full text-white text-sm font-medium transition-colors duration-300 ${isDownloading ? 'bg-gray-600 cursor-not-allowed' : 'bg-green-500 hover:bg-green-400'}`}
+            >
                 {isDownloading ? 'Downloading...' : 'Download Metadata'}
             </button>
         </div>

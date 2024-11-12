@@ -68,34 +68,20 @@ const LikedSongsDetail = () => {
     };
 
     return (
-        <div style={{
-            backgroundColor: '#121212',
-            color: '#FFFFFF',
-            minHeight: '100vh',
-            padding: '20px',
-            fontFamily: 'Arial, sans-serif',
-        }}>
-            <header style={{
-                textAlign: 'center',
-                paddingBottom: '20px',
-                borderBottom: '1px solid #282828',
-                marginBottom: '20px',
-            }}>
-                <h1 style={{ fontSize: '2rem', color: '#FFFFFF', margin: '0' }}>Liked Songs</h1>
-                <button onClick={() => navigate(-1)} style={{
-                    backgroundColor: '#1DB954',
-                    color: '#FFFFFF',
-                    borderRadius: '50px',
-                    padding: '10px 20px',
-                    border: 'none',
-                    cursor: 'pointer',
-                    marginTop: '10px',
-                    fontSize: '1rem'
-                }}>Back</button>
+        <div className="bg-gray-900 text-white min-h-screen p-12 font-sans">
+            <header className="text-center pb-5 border-b border-gray-700">
+                <h1 className="text-2xl font-bold">Liked Songs</h1>
+                <button
+                    onClick={() => navigate(-1)}
+                    className="mt-4 bg-green-500 text-white rounded-full px-6 py-2 cursor-pointer hover:bg-green-400 transition-colors"
+                >
+                    Back
+                </button>
             </header>
 
             {isLoading && <LoadingSpinner />}
-            {error && <p style={{ textAlign: 'center' }}>Error fetching liked songs.</p>}
+            {error && <p className="text-center text-red-500 mt-4">Error fetching liked songs.</p>}
+
             {likedSongs && (
                 <>
                     <SortingFilteringControls
@@ -112,12 +98,7 @@ const LikedSongsDetail = () => {
                         placeholder="Search songs..."
                     />
 
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-                        gap: '20px',
-                        marginTop: '20px',
-                    }}>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
                         {likedSongs
                             .filter((track) =>
                                 track.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -143,17 +124,12 @@ const LikedSongsDetail = () => {
                     </div>
 
                     {hasNextPage && (
-                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                            <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage} style={{
-                                backgroundColor: '#1DB954',
-                                color: '#FFFFFF',
-                                borderRadius: '10px',
-                                padding: '10px 20px',
-                                border: 'none',
-                                cursor: isFetchingNextPage ? 'not-allowed' : 'pointer',
-                                fontSize: '1rem',
-                                transition: 'background-color 0.3s ease',
-                            }}>
+                        <div className="text-center mt-6">
+                            <button
+                                onClick={() => fetchNextPage()}
+                                disabled={isFetchingNextPage}
+                                className={`bg-green-500 text-white rounded-lg px-6 py-2 font-medium transition-colors ${isFetchingNextPage ? 'cursor-not-allowed opacity-50' : 'hover:bg-green-400'}`}
+                            >
                                 {isFetchingNextPage ? <LoadingSpinner size={20} /> : 'Load More'}
                             </button>
                         </div>
