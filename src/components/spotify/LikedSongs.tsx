@@ -12,7 +12,6 @@ import FileSaver from 'file-saver';
 
 const LikedSongsDetail = () => {
     const navigate = useNavigate();
-
     const { token } = useSpotifyToken();
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -61,7 +60,6 @@ const LikedSongsDetail = () => {
         fetchNextPage,
     ]);
 
-    // Download metadata for a single track
     const handleDownload = (track: Track) => {
         const blob = new Blob([JSON.stringify(track, null, 2)], {
             type: 'application/json;charset=utf-8',
@@ -70,73 +68,99 @@ const LikedSongsDetail = () => {
     };
 
     return (
-        <>
-            <header>
-                <h1>Liked Songs</h1>
-                <button onClick={() => navigate(-1)}>Back</button>
+        <div style={{
+            backgroundColor: '#121212',
+            color: '#FFFFFF',
+            minHeight: '100vh',
+            padding: '20px',
+            fontFamily: 'Arial, sans-serif',
+        }}>
+            <header style={{
+                textAlign: 'center',
+                paddingBottom: '20px',
+                borderBottom: '1px solid #282828',
+                marginBottom: '20px',
+            }}>
+                <h1 style={{ fontSize: '2rem', color: '#FFFFFF', margin: '0' }}>Liked Songs</h1>
+                <button onClick={() => navigate(-1)} style={{
+                    backgroundColor: '#1DB954',
+                    color: '#FFFFFF',
+                    borderRadius: '50px',
+                    padding: '10px 20px',
+                    border: 'none',
+                    cursor: 'pointer',
+                    marginTop: '10px',
+                    fontSize: '1rem'
+                }}>Back</button>
             </header>
-            <div className="container">
-                {isLoading && <LoadingSpinner />}
-                {error && <p>Error fetching liked songs.</p>}
-                {likedSongs && (
-                    <>
-                        <SortingFilteringControls
-                            searchTerm={searchTerm}
-                            setSearchTerm={setSearchTerm}
-                            sortOption={sortOption}
-                            setSortOption={setSortOption}
-                            sortOptions={[
-                                { value: 'none', label: 'None' },
-                                { value: 'name', label: 'Name' },
-                                { value: 'artist', label: 'Artist' },
-                                { value: 'album', label: 'Album' },
-                            ]}
-                            placeholder="Search songs..."
-                        />
 
-                        <div className="info-grid">
-                            {likedSongs
-                                .filter((track) =>
-                                    track.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                                    track.artists.some((artist) =>
-                                        artist.name.toLowerCase().includes(searchTerm.toLowerCase())
-                                    ) ||
-                                    track.album.name.toLowerCase().includes(searchTerm.toLowerCase())
-                                )
-                                .sort((a, b) => {
-                                    if (sortOption === 'name') {
-                                        return a.name.localeCompare(b.name);
-                                    } else if (sortOption === 'artist') {
-                                        return a.artists[0].name.localeCompare(b.artists[0].name);
-                                    } else if (sortOption === 'album') {
-                                        return a.album.name.localeCompare(b.album.name);
-                                    } else {
-                                        return 0;
-                                    }
-                                })
-                                .map((track) => (
-                                    <TrackItem key={track.id} track={track} onDownload={handleDownload} />
-                                ))}
+            {isLoading && <LoadingSpinner />}
+            {error && <p style={{ textAlign: 'center' }}>Error fetching liked songs.</p>}
+            {likedSongs && (
+                <>
+                    <SortingFilteringControls
+                        searchTerm={searchTerm}
+                        setSearchTerm={setSearchTerm}
+                        sortOption={sortOption}
+                        setSortOption={setSortOption}
+                        sortOptions={[
+                            { value: 'none', label: 'None' },
+                            { value: 'name', label: 'Name' },
+                            { value: 'artist', label: 'Artist' },
+                            { value: 'album', label: 'Album' },
+                        ]}
+                        placeholder="Search songs..."
+                    />
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                        gap: '20px',
+                        marginTop: '20px',
+                    }}>
+                        {likedSongs
+                            .filter((track) =>
+                                track.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                                track.artists.some((artist) =>
+                                    artist.name.toLowerCase().includes(searchTerm.toLowerCase())
+                                ) ||
+                                track.album.name.toLowerCase().includes(searchTerm.toLowerCase())
+                            )
+                            .sort((a, b) => {
+                                if (sortOption === 'name') {
+                                    return a.name.localeCompare(b.name);
+                                } else if (sortOption === 'artist') {
+                                    return a.artists[0].name.localeCompare(b.artists[0].name);
+                                } else if (sortOption === 'album') {
+                                    return a.album.name.localeCompare(b.album.name);
+                                } else {
+                                    return 0;
+                                }
+                            })
+                            .map((track) => (
+                                <TrackItem key={track.id} track={track} onDownload={handleDownload} />
+                            ))}
+                    </div>
+
+                    {hasNextPage && (
+                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                            <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage} style={{
+                                backgroundColor: '#1DB954',
+                                color: '#FFFFFF',
+                                borderRadius: '10px',
+                                padding: '10px 20px',
+                                border: 'none',
+                                cursor: isFetchingNextPage ? 'not-allowed' : 'pointer',
+                                fontSize: '1rem',
+                                transition: 'background-color 0.3s ease',
+                            }}>
+                                {isFetchingNextPage ? <LoadingSpinner size={20} /> : 'Load More'}
+                            </button>
                         </div>
-
-                        {hasNextPage && (
-                            <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                                <button
-                                    onClick={() => fetchNextPage()}
-                                    disabled={isFetchingNextPage}
-                                >
-                                    {isFetchingNextPage ? (
-                                        <LoadingSpinner size={20} />
-                                    ) : (
-                                        'Load More'
-                                    )}
-                                </button>
-                            </div>
-                        )}
-                    </>
-                )}
-            </div>
-        </>
+                    )}
+                </>
+            )}
+        </div>
     );
 };
 

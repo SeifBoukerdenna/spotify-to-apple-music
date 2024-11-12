@@ -5,6 +5,7 @@ import LikedSongsDetail from "./components/spotify/LikedSongs";
 import "./index.css";
 import AppleMusicHome from "./components/appleMusic/AppleMusicHome";
 import { MusicMode } from "./enums/musicMode";
+import CreatePlaylist from "./components/spotify/CreatePlaylist";
 
 const App = () => {
   const [mode, setMode] = useState<MusicMode>(MusicMode.Spotify);
@@ -33,6 +34,7 @@ const App = () => {
             <>
               <Route path="/" element={<Home />} />
               <Route path="/liked-songs" element={<LikedSongsDetail />} />
+              <Route path="/create-playlist" element={<CreatePlaylist />} />
             </>
           ) : (
             <>

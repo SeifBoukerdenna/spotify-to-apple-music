@@ -15,22 +15,53 @@ const SortingFilteringControls = <T extends string>({
     sortOptions,
     placeholder,
 }: SortingFilteringControlsProps<T>): JSX.Element => (
-    <div style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center' }}>
+    <div style={{
+        marginBottom: '1rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '1rem',
+        backgroundColor: '#282828',
+        padding: '10px 15px',
+        borderRadius: '8px',
+    }}>
         <input
             type="text"
             placeholder={placeholder}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ marginRight: '1rem', flex: '1' }}
+            style={{
+                flex: '1',
+                backgroundColor: '#333',
+                color: '#FFF',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                padding: '8px',
+                fontSize: '1rem',
+                outline: 'none',
+            }}
         />
-        <label htmlFor="sort" style={{ marginRight: '0.5rem' }}>
+
+        <label htmlFor="sort" style={{
+            color: '#B3B3B3',
+            fontSize: '0.9rem',
+        }}>
             Sort by:
         </label>
+
         <select
             id="sort"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value as T)}
-            style={{ width: '150px' }}
+            style={{
+                backgroundColor: '#333',
+                color: '#FFF',
+                border: '1px solid #444',
+                borderRadius: '4px',
+                padding: '8px',
+                width: '150px',
+                fontSize: '1rem',
+                outline: 'none',
+            }}
         >
             {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>

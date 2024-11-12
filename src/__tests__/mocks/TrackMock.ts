@@ -9,4 +9,5 @@ export const createMockTrack = (id: string, name: string): Track => ({
   album: createMockAlbum(`album-${id}`, `Album ${id}`),
   artists: [createMockArtist(`artist-${id}`, `Artist ${id}`)],
   external_urls: { spotify: `https://spotify.com/track/${id}` },
+  uri: "",
 });

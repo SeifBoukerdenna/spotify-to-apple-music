@@ -47,6 +47,7 @@ describe("fetchAllLikedSongs", () => {
               },
             ],
             external_urls: { spotify: "http://spotify.com/track1" },
+            uri: "", // Adding uri field here
           },
         },
         {
@@ -78,6 +79,7 @@ describe("fetchAllLikedSongs", () => {
               },
             ],
             external_urls: { spotify: "http://spotify.com/track2" },
+            uri: "", // Adding uri field here
           },
         },
       ],
@@ -136,6 +138,7 @@ describe("fetchAllLikedSongs", () => {
           },
         ],
         external_urls: { spotify: "http://spotify.com/track1" },
+        uri: "", // Adding uri field here
       },
       {
         id: "2",
@@ -165,6 +168,7 @@ describe("fetchAllLikedSongs", () => {
           },
         ],
         external_urls: { spotify: "http://spotify.com/track2" },
+        uri: "", // Adding uri field here
       },
     ]);
 
