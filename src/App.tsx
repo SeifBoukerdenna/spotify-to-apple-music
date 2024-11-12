@@ -36,6 +36,7 @@ const App = () => {
             ) : (
               <>
                 <Route path="/" element={<AppleMusicHome />} />
+                <Route path="**" element={<AppleMusicHome />} />
               </>
             )}
           </Routes>

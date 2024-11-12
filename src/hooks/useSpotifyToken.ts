@@ -16,7 +16,7 @@ const SCOPE = [
   // Write permissions
   "playlist-modify-public",
   "playlist-modify-private",
-  "ugc-image-upload", // Add this if you want to upload playlist cover images
+  "ugc-image-upload",
 ].join(" ");
 
 export const useSpotifyToken = () => {

@@ -1,10 +1,9 @@
-// PlaylistDetail.tsx
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSpotifyToken } from '../../hooks/useSpotifyToken';
 import { usePlaylistDetails } from '../../hooks/usePlaylistDetails';
 import LoadingSpinner from './LoadingSpinner';
 import { PlaylistHeader } from '../header/PlaylistHeader';
-import { TrackGrid } from '../tracks/TracksGrid';
+import { PlaylistTracksGrid } from '../tracks/PlaylistTracksGrid';
 
 const PlaylistDetail = () => {
     const { id } = useParams<{ id: string }>();
@@ -38,7 +37,7 @@ const PlaylistDetail = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-800 to-black text-white p-8">
             <PlaylistHeader playlist={playlistInfo} onBack={() => navigate(-1)} />
-            <TrackGrid tracks={tracks} />
+            <PlaylistTracksGrid tracks={tracks} />
         </div>
     );
 };
