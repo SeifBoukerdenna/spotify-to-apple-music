@@ -10,16 +10,20 @@ import CreatePlaylist from "./components/spotify/CreatePlaylist";
 import PlaylistDetail from "./components/spotify/PlaylistDetail";
 
 const App = () => {
-  const [mode, setMode] = useState<MusicMode>(MusicMode.Spotify);
+  const [mode, setMode] = useState<MusicMode>(
+    () => (localStorage.getItem("musicMode") as MusicMode) || MusicMode.Spotify
+  );
 
   const toggleMode = () => {
-    setMode((prevMode) =>
-      prevMode === MusicMode.Spotify ? MusicMode.AppleMusic : MusicMode.Spotify
-    );
+    const newMode = mode === MusicMode.Spotify ? MusicMode.AppleMusic : MusicMode.Spotify;
+    setMode(newMode);
+    localStorage.setItem("musicMode", newMode);
   };
 
   useEffect(() => {
-    document.body.className = mode === MusicMode.Spotify ? 'bg-gray-900 text-white' : 'bg-white text-black';
+    document.body.className = mode === MusicMode.Spotify
+      ? 'bg-gray-900 text-white'
+      : 'bg-gradient-to-b from-gray-800 to-black text-white';
   }, [mode]);
 
   return (
@@ -28,10 +32,9 @@ const App = () => {
         <div className="fixed top-4 right-4 z-50">
           <button
             onClick={toggleMode}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105
-              ${mode === MusicMode.Spotify
-                ? "bg-gradient-to-r from-pink-500 to-red-500 text-white hover:from-pink-400 hover:to-red-400"
-                : "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:from-green-400 hover:to-teal-400"
+            className={`flex items-center gap-2 px-5 py-2 rounded-full shadow-lg transition-transform transform hover:scale-105 ${mode === MusicMode.AppleMusic
+              ? "bg-gradient-to-r from-green-400 to-green-500 text-white"
+              : "bg-gradient-to-r from-pink-500 to-red-500 text-white"
               }`}
           >
             {mode === MusicMode.Spotify ? (
@@ -50,7 +53,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/liked-songs" element={<LikedSongsDetail />} />
               <Route path="/create-playlist" element={<CreatePlaylist />} />
-              <Route path="/playlist/:id" element={<PlaylistDetail />} /> {/* Dynamic Route */}
+              <Route path="/playlist/:id" element={<PlaylistDetail />} />
             </>
           ) : (
             <>
