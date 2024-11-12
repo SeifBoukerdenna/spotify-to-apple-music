@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { FaSpotify, FaApple } from "react-icons/fa";
 import Home from "./components/spotify/Home";
 import LikedSongsDetail from "./components/spotify/LikedSongs";
 import "./index.css";
 import AppleMusicHome from "./components/appleMusic/AppleMusicHome";
 import { MusicMode } from "./enums/musicMode";
 import CreatePlaylist from "./components/spotify/CreatePlaylist";
+import PlaylistDetail from "./components/spotify/PlaylistDetail";
 
 const App = () => {
   const [mode, setMode] = useState<MusicMode>(MusicMode.Spotify);
@@ -18,7 +18,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    document.body.className = mode === MusicMode.Spotify ? "bg-gray-900 text-white" : "bg-white text-black";
+    document.body.className = mode === MusicMode.Spotify ? 'bg-gray-900 text-white' : 'bg-white text-black';
   }, [mode]);
 
   return (
@@ -27,20 +27,12 @@ const App = () => {
         <div className="fixed top-4 right-4 z-50">
           <button
             onClick={toggleMode}
-            className={`flex items-center gap-2 px-5 py-2 rounded-full shadow-lg transform transition duration-300 ease-in-out hover:scale-105
-              ${mode === MusicMode.AppleMusic
-                ? "bg-gradient-to-r from-green-500 to-teal-500 text-white hover:from-green-400 hover:to-teal-400"
-                : "bg-gradient-to-r from-pink-500 to-red-500 text-white hover:from-pink-400 hover:to-red-400"
+            className={`px-4 py-2 rounded-full transition-colors duration-300 ${mode === MusicMode.AppleMusic
+              ? "bg-green-500 text-white hover:bg-green-400"
+              : "bg-red-500 text-white hover:bg-red-400"
               }`}
           >
-            {mode === MusicMode.Spotify ? (
-              <FaApple className="text-xl" />
-            ) : (
-              <FaSpotify className="text-xl" />
-            )}
-            <span className="font-semibold">
-              Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}
-            </span>
+            Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}
           </button>
         </div>
         <Routes>
@@ -49,6 +41,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="/liked-songs" element={<LikedSongsDetail />} />
               <Route path="/create-playlist" element={<CreatePlaylist />} />
+              <Route path="/playlist/:id" element={<PlaylistDetail />} /> {/* Dynamic Route */}
             </>
           ) : (
             <>

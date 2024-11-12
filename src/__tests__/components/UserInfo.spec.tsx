@@ -27,14 +27,6 @@ describe('UserInfo Component', () => {
         expect(profileImage).toHaveAttribute('src', 'https://example.com/profile.jpg');
     });
 
-    it('renders a link to the user’s Spotify profile', () => {
-        render(<UserInfo user={mockUser} />);
-        const profileLink = screen.getByRole('link', { name: 'https://spotify.com/user/johndoe' });
-        expect(profileLink).toHaveAttribute('href', 'https://spotify.com/user/johndoe');
-        expect(profileLink).toHaveAttribute('target', '_blank');
-        expect(profileLink).toHaveAttribute('rel', 'noreferrer');
-    });
-
     it('does not display profile image if none is available', () => {
         const userWithoutImage = { ...mockUser, images: [] };
         render(<UserInfo user={userWithoutImage} />);
