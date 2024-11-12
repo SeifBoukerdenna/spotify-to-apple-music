@@ -105,6 +105,8 @@ const LikedSongsDetail = () => {
                         hasMore={hasNextPage}
                         isLoadingMore={isFetchingNextPage}
                         onLoadMore={() => fetchNextPage()}
+                        searchTerm={searchTerm}
+                        sortOption={sortOption}
                     />
                 </>
             )}
