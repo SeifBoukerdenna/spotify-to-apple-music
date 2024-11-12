@@ -23,7 +23,7 @@ const SearchBar = ({ onSearch }: SearchBarProps) => {
                 placeholder="Search for songs..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="search-input"
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-full pl-12 pr-4 py-3 placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
             />
         </div>
     );
