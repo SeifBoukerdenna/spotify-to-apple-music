@@ -10,6 +10,7 @@ export const usePlaylistManagement = (token: string | null) => {
   const [sortOption, setSortOption] = useState<"name" | "tracks" | "none">(
     "none"
   );
+  const [filteredPlaylists, setFilteredPlaylists] = useState<Playlist[]>([]);
 
   const {
     items: playlists,
@@ -27,24 +28,47 @@ export const usePlaylistManagement = (token: string | null) => {
     0
   );
 
+  // Filter and sort playlists based on search term and sort option
+  useEffect(() => {
+    let result = [...playlists];
+
+    // Filter based on search term
+    if (debouncedSearchTerm) {
+      const searchLower = debouncedSearchTerm.toLowerCase();
+      result = result.filter((playlist) =>
+        playlist.name.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // Sort based on selected option
+    if (sortOption !== "none") {
+      result.sort((a, b) => {
+        if (sortOption === "name") {
+          return a.name.localeCompare(b.name);
+        } else if (sortOption === "tracks") {
+          return b.tracks.total - a.tracks.total;
+        }
+        return 0;
+      });
+    }
+
+    setFilteredPlaylists(result);
+  }, [playlists, debouncedSearchTerm, sortOption]);
+
+  // Load more results if search returns few results
   useEffect(() => {
     if (
       !isLoading &&
       !isFetchingNextPage &&
       hasNextPage &&
-      debouncedSearchTerm
+      debouncedSearchTerm &&
+      filteredPlaylists.length < 10
     ) {
-      const filteredPlaylists = playlists.filter((playlist) =>
-        playlist.name.toLowerCase().includes(debouncedSearchTerm.toLowerCase())
-      );
-
-      if (filteredPlaylists.length === 0) {
-        fetchNextPage();
-      }
+      fetchNextPage();
     }
   }, [
     debouncedSearchTerm,
-    playlists,
+    filteredPlaylists.length,
     isLoading,
     isFetchingNextPage,
     hasNextPage,
@@ -52,15 +76,16 @@ export const usePlaylistManagement = (token: string | null) => {
   ]);
 
   return {
+    playlists: filteredPlaylists,
+    allPlaylists: playlists,
+    isLoading,
+    error,
     searchTerm,
     setSearchTerm,
     sortOption,
     setSortOption,
-    playlists,
-    isLoading,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
+    hasMore: hasNextPage,
+    isLoadingMore: isFetchingNextPage,
+    loadMore: fetchNextPage,
   };
 };

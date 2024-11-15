@@ -1,6 +1,7 @@
 // components/appleMusic/AppleMusicPlaylistCard.tsx
 import { motion } from 'framer-motion';
 import { FaPlay, FaAppleAlt } from 'react-icons/fa';
+import { AppleMusicIcon } from '../../icons/AppleMusicIcon';
 
 interface AppleMusicPlaylistCardProps {
     playlist: MusicKit.Resource<MusicKit.PlaylistAttributes>;
@@ -60,11 +61,9 @@ export const AppleMusicPlaylistCard = ({ playlist }: AppleMusicPlaylistCardProps
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-3 mt-3 opacity-0 group-hover:opacity-100
-                         transition-all duration-300">
-                        <button className="inline-flex items-center gap-2 text-xs text-red-400
-                             hover:text-red-300 transition-colors">
-                            <FaAppleAlt className="w-4 h-4" />
+                    <div className="flex items-center gap-3 mt-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                        <button className="inline-flex items-center gap-2 text-xs text-red-400 hover:text-red-300 transition-colors">
+                            <AppleMusicIcon className="w-4 h-4" />
                             <span>Play in Apple Music</span>
                         </button>
                     </div>

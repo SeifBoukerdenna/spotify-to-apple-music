@@ -25,7 +25,13 @@ const CreatePlaylist = () => {
         createPlaylist,
     } = usePlaylistCreation(token);
 
-    const { searchResults, isSearching, handleSearch } = useTrackSearch(token);
+    const {
+        searchResults,
+        isSearching,
+        searchTerm,
+        setSearchTerm,
+        error: searchError
+    } = useTrackSearch(token);
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-1100 text-white">
@@ -44,10 +50,12 @@ const CreatePlaylist = () => {
 
                     <SearchSection
                         isSearching={isSearching}
-                        onSearch={handleSearch}
+                        searchTerm={searchTerm}
+                        onSearchTermChange={setSearchTerm}
                         searchResults={searchResults}
                         selectedTracks={selectedTracks}
                         onAddTrack={addTrack}
+                        error={searchError}
                     />
 
                     {selectedTracks.length > 0 && (

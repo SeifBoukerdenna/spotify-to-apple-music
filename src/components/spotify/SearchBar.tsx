@@ -1,32 +1,25 @@
-// SearchBar.tsx
-import { useEffect, useState } from 'react';
-import { useDebounce } from 'use-debounce';
+// components/spotify/SearchBar.tsx
+import { FaSearch } from 'react-icons/fa';
 
 interface SearchBarProps {
-    onSearch: (query: string) => void;
+    searchTerm: string;
+    onSearchChange: (value: string) => void;
+    placeholder?: string;
 }
 
-const SearchBar = ({ onSearch }: SearchBarProps) => {
-    const [searchTerm, setSearchTerm] = useState('');
-    const [debouncedSearchTerm] = useDebounce(searchTerm, 500);
-
-    useEffect(() => {
-        if (debouncedSearchTerm) {
-            onSearch(debouncedSearchTerm);
-        }
-    }, [debouncedSearchTerm, onSearch]);
-
+export const SearchBar = ({ searchTerm, onSearchChange, placeholder = "Search for songs..." }: SearchBarProps) => {
     return (
-        <div className="search-bar">
+        <div className="relative">
+            <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
                 type="text"
-                placeholder="Search for songs..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-gray-800/50 border border-gray-700 rounded-full pl-12 pr-4 py-3 placeholder-gray-500 focus:outline-none focus:border-green-500 transition-colors"
+                onChange={(e) => onSearchChange(e.target.value)}
+                placeholder={placeholder}
+                className="w-full bg-gray-800/50 border border-gray-700 rounded-full
+                 pl-12 pr-4 py-3 placeholder-gray-500 focus:outline-none
+                 focus:border-green-500 transition-colors"
             />
         </div>
     );
 };
-
-export default SearchBar;
