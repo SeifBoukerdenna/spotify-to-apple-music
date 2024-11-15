@@ -70,7 +70,18 @@ declare namespace MusicKit {
        * Retrieves the playlists in the user's Apple Music library.
        * @returns {Promise<Resource<Playlist>[]>} A promise that resolves to an array of Playlist resources.
        */
-      playlists(): Promise<Resource<Playlist>[]>;
+      playlists(): Promise<Resource<PlaylistAttributes>[]>;
+    };
+  }
+
+  interface TrackAttributes {
+    name: string;
+    artistName: string;
+    albumName: string;
+    artwork: Artwork;
+    playParams: {
+      id: string;
+      kind: string;
     };
   }
 
@@ -79,17 +90,18 @@ declare namespace MusicKit {
    * @template T - The type of the resource's attributes.
    */
   interface Resource<T> {
-    /** The unique identifier of the resource. */
     id: string;
-
-    /** The type of the resource (e.g., "playlist"). */
     type: string;
-
-    /** The API endpoint for accessing this resource. */
     href: string;
-
-    /** The attributes of the resource. */
     attributes: T;
+    relationships?: {
+      tracks?: {
+        data: Resource<TrackAttributes>[];
+        meta: {
+          total: number;
+        };
+      };
+    };
   }
 
   /**
@@ -104,6 +116,21 @@ declare namespace MusicKit {
 
     /** The artwork for the playlist, if available. */
     artwork?: Artwork;
+
+    /** Whether the playlist has a catalog version. */
+    hasCatalog: boolean;
+
+    /** Whether the playlist is in the user's library. */
+    hasLibrary: boolean;
+
+    /** Whether the playlist is public. */
+    isPublic: boolean;
+
+    /** Whether the user can edit the playlist. */
+    canEdit: boolean;
+
+    /** The number of tracks in the playlist. */
+    trackCount: number;
   }
 
   /**
@@ -145,7 +172,4 @@ declare namespace MusicKit {
     /** Optional quaternary text color. */
     textColor4?: string;
   }
-
-  /** Type alias for Playlist, representing the attributes of a playlist resource. */
-  type Playlist = PlaylistAttributes;
 }

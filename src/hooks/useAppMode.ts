@@ -1,3 +1,4 @@
+// hooks/useAppMode.ts
 import { useState, useEffect } from "react";
 import { MusicMode } from "../enums/musicMode";
 
