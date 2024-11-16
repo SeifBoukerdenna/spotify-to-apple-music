@@ -1,162 +1,196 @@
-# Music Metadata Manager
+# Spotify to Apple Music Transfer
 
-A web application that allows users to connect to their Spotify and Apple Music accounts, view their playlists and liked songs, and download metadata for their music. The app provides a unified platform to manage and export music metadata across both streaming services.
+A modern web application built with React and TypeScript that enables users to seamlessly manage and transfer their music libraries between Spotify and Apple Music. Featuring a beautiful, responsive UI that adapts to each platform's design language, robust authentication handling, and comprehensive music library management capabilities.
 
-## Table of Contents
+## ✨ Features
 
-- [Introduction](#introduction)
-- [Goals](#goals)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Getting Started](#getting-started)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Running the Application](#running-the-application)
-- [Project Structure](#project-structure)
-- [Future Improvements](#future-improvements)
-- [Contributing](#contributing)
-- [License](#license)
+### 🎵 Platform Integration
+- **Spotify Integration**
+  - OAuth-based authentication
+  - Access to playlists, liked songs, and user profile
+  - Comprehensive playlist management
+  - Metadata export functionality
 
+- **Apple Music Integration**
+  - MusicKit JS integration
+  - Library access and playlist management
+  - Native platform design aesthetics
 
-## Introduction
+### 🎨 User Interface
+- Seamless platform switching with animated transitions
+- Responsive design optimized for all devices
+- Platform-specific styling that matches each service's design language
+- Infinite scroll for large music libraries
 
-Music Metadata Manager is a web application designed to help users seamlessly interact with their music libraries on Spotify and Apple Music. By providing an intuitive interface, users can view their playlists and liked songs, download metadata in universally accepted formats, and switch between platforms with ease.
+### 📊 Library Management
+- Create and manage playlists
+- Search and filter functionality
+- Sort by various criteria (name, tracks, artists, albums)
+- Batch operations support
 
+### 💾 Data Export
+- Export playlist metadata to CSV
+- Download track information in JSON format
+- Comprehensive metadata fields support
 
-## Goals
-
-- **Unified Music Management**: Offer a single platform for users to access and manage their music across Spotify and Apple Music.
-- **Metadata Export**: Enable users to download music metadata with universally accepted fields for use on other platforms or personal analysis.
-- **User-Friendly Interface**: Provide an intuitive and responsive UI that reflects the design language of each platform.
-- **Platform Switching**: Allow users to toggle between Spotify and Apple Music modes seamlessly.
-
-## Features
-
-### Spotify Mode
-- **Authentication**: Log in with Spotify credentials using OAuth.
-- **User Profile**: Display user information fetched from Spotify.
-- **Playlists and Liked Songs**:
-  - View all user playlists and liked songs.
-  - Search, sort, and filter playlists and tracks.
-- **Metadata Download**:
-  - Download playlist metadata in CSV format.
-  - Download individual track metadata in JSON format.
-  - Metadata includes universally accepted fields: song title, artist, album, and release year.
-
-### Apple Music Mode
-- **Authentication**: Connect to Apple Music using MusicKit JS.
-- **User Playlists**:
-  - View user playlists with artwork and descriptions.
-- **Platform-Specific Styling**:
-  - The app's UI adapts to reflect Apple Music's design aesthetics.
-
-### General Features
-- **Mode Toggle**: Switch between Spotify and Apple Music modes at any time.
-- **Responsive Design**: Optimized for desktop and mobile devices.
-- **Error Handling**: Inform users of any issues during authentication or data fetching.
-
-## Tech Stack
-
-### Front-end:
-- **React with TypeScript**: For building the user interface.
-- **React Router**: For client-side routing.
-- **Axios**: For making HTTP requests.
-- **FileSaver**: For downloading files.
-- **json2csv**: For converting JSON data to CSV.
-
-### APIs and Libraries:
-- **Spotify Web API**: For interacting with Spotify data.
-- **Apple Music API**: For interacting with Apple Music data.
-- **MusicKit JS**: For Apple Music integration.
-
-### Styling:
-- **CSS**: With platform-specific styles to mimic Spotify and Apple Music interfaces.
-
-### Build Tools:
-- **Webpack**: For module bundling (if applicable).
-- **Babel**: For JavaScript transpiling (if applicable).
-
-
-## Getting Started
-
-To get started with the Music Metadata Manager, follow these steps:
+## 🚀 Getting Started
 
 ### Prerequisites
 
-Before you begin, ensure you have met the following requirements:
+1. Node.js (v16 or higher)
+2. Spotify Developer Account
+3. Apple Developer Account with MusicKit access
+4. Modern web browser
 
-- **Node.js and npm**: Make sure you have Node.js and npm installed on your machine. You can download them from [nodejs.org](https://nodejs.org/).
+### Environment Setup
 
-- **Spotify Developer Account**:
-  - Register an application on the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications) to obtain a Client ID and Client Secret.
+Create a `.env` file in the root directory with the following variables:
 
-- **Apple Developer Account**:
-  - Enable Apple Music API and MusicKit capabilities in your Apple Developer account.
-  - Generate a Developer Token and obtain your Team ID, Key ID, and private key (.p8 file).
-
-## Installation
-
-Follow these steps to install the application:
-
-1. **Clone the repository**:
-   ```sh
-   git clone https://github.com/yourusername/spotify-to-apple-music.git
-   cd spotify-to-apple-music
-   ```
-
-2. **Install dependencies**:
-   ```sh
-   npm install
-   ```
-
-3. **Set up environment variables**:
-   Create a `.env` file in the root directory and add the following variables:
-   ```env
-   SPOTIFY_CLIENT_ID=your_spotify_client_id
-   SPOTIFY_CLIENT_SECRET=your_spotify_client_secret
-   APPLE_TEAM_ID=your_apple_team_id
-   APPLE_KEY_ID=your_apple_key_id
-   APPLE_PRIVATE_KEY=your_apple_private_key
-   ```
-
-## Running the Application
-
-To run the application locally, use the following command:
-```sh
-npm start
+```env
+VITE_SPOTIFY_CLIENT_ID=your_spotify_client_id
+VITE_REDIRECT_URI=your_redirect_uri
+VITE_API_URL=your_api_url
 ```
 
-This will start the development server and open the application in your default web browser.
+### Installation
 
-## Project Structure
+```bash
+# Clone the repository
+git clone https://github.com/elmelz6472/spotify-apple-music-transfer.git
 
-The project structure is as follows:
-```
-spotify-to-apple-music/
-├── public/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   ├── services/
-│   ├── styles/
-│   ├── App.tsx
-│   ├── index.tsx
-│   └── ...
-├── .env
-├── package.json
-└── README.md
+# Navigate to project directory
+cd spotify-apple-music-transfer
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-## Future Improvements
+## 🏗️ Project Structure
 
-- **Enhanced Metadata Fields**: Add more metadata fields such as genre, duration, and popularity.
-- **Playlist Transfer**: Implement functionality to transfer playlists between Spotify and Apple Music.
-- **User Preferences**: Allow users to save and manage their preferences within the app.
+```
+src/
+├── components/
+│   ├── animations/      # Transition and animation components
+│   ├── appleMusic/     # Apple Music specific components
+│   ├── header/         # Header components for different views
+│   ├── layout/         # Layout components
+│   ├── navigation/     # Navigation components
+│   ├── playlists/      # Playlist related components
+│   ├── search/         # Search components
+│   ├── spotify/        # Spotify specific components
+│   └── tracks/         # Track related components
+├── hooks/              # Custom React hooks
+├── interfaces/         # TypeScript interfaces
+├── enums/             # TypeScript enums
+├── fetch/             # API fetch utilities
+├── icons/             # Custom icon components
+├── App.tsx            # Main application component
+└── config.ts          # Application configuration
+```
 
-## Contributing
+## 🛠️ Tech Stack
 
-Contributions are welcome! Please read the [contributing guidelines](CONTRIBUTING.md) for more information.
+### Core Technologies
+- React 18
+- TypeScript
+- Vite
+- React Router v6
+- TanStack Query (React Query)
+- Framer Motion
+- Tailwind CSS
 
-## License
+### API Integration
+- Spotify Web API
+- Apple Music API (MusicKit JS)
+- Axios
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+### UI Components
+- Lucide React Icons
+- Recharts
+- Shadcn/ui
+
+## 📱 Features Deep Dive
+
+### Authentication Flow
+- **Spotify**: OAuth 2.0 with automatic token refresh
+- **Apple Music**: MusicKit JS authorization with developer token
+
+### Platform Switching
+```typescript
+const { mode, isTransitioning, toggleMode } = useAppMode();
+```
+Seamless transition between platforms with animation support and state persistence.
+
+### Playlist Management
+```typescript
+const {
+    selectedTracks,
+    isSaving,
+    playlistName,
+    createPlaylist
+} = usePlaylistCreation(token);
+```
+Comprehensive playlist creation and management with metadata support.
+
+### Search and Filter
+```typescript
+const {
+    searchResults,
+    isSearching,
+    searchTerm,
+    setSearchTerm
+} = useTrackSearch(token);
+```
+Real-time search with debouncing and efficient cache management.
+
+## 🔧 Development
+
+### Commands
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Type checking
+npm run typecheck
+```
+
+### Adding New Features
+1. Create necessary interfaces in `/interfaces`
+2. Add required API methods in `/fetch`
+3. Create new components in appropriate directories
+4. Update relevant hooks in `/hooks`
+5. Add routes if needed in `App.tsx`
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m 'Add amazing feature'`
+4. Push to the branch: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🙏 Acknowledgements
+
+- [Spotify Web API Documentation](https://developer.spotify.com/documentation/web-api/)
+- [Apple Music API Documentation](https://developer.apple.com/documentation/applemusicapi/)
+- [Shadcn/ui Components](https://ui.shadcn.com/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+## 📫 Contact
+
+Your Name - [@yourtwitter](https://twitter.com/yourtwitter) - email@example.com
+
+Project Link: [https://github.com/elmelz6472/spotify-apple-music-transfer](https://github.com/elmelz6472/spotify-apple-music-transfer)
