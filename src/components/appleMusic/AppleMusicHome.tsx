@@ -8,13 +8,21 @@ import { FaPlus } from 'react-icons/fa';
 import { AppleMusicIcon } from '../../icons/AppleMusicIcon';
 import { useNavigate } from 'react-router-dom';
 import { AppleMusicUserInfo } from './AppleMusicUserInfo';
+import { useEffect } from 'react';
 
 const AppleMusicHome = () => {
     const navigate = useNavigate();
-    const { isAuthorized, musicKitInstance, handleAuthorize, handleUnauthorize } = useMusicKit();
-    const { user, isLoading: isUserLoading, error: userError } = useAppleMusicUser();
+    const { isAuthorized, handleAuthorize, handleUnauthorize, isInitialized } = useMusicKit();
+    const { user, isLoading: isUserLoading, error: userError, refetch } = useAppleMusicUser();
 
-    if (!musicKitInstance) {
+    // Effect to refetch user data when authorization status changes
+    useEffect(() => {
+        if (isAuthorized && isInitialized) {
+            refetch();
+        }
+    }, [isAuthorized, isInitialized, refetch]);
+
+    if (!isInitialized) {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <LoadingSpinner color="#fc3c44" size={50} />
@@ -26,7 +34,7 @@ const AppleMusicHome = () => {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-800 to-black">
                 <div className="text-center px-4">
-                    <AppleMusicIcon className="w-24 h-24 mx-auto mb-6" />
+                    <AppleMusicIcon size={55} withBackground className="w-24 h-24 mx-auto mb-6" />
                     <h2 className="text-3xl font-bold text-white mb-6">Connect to Apple Music</h2>
                     <p className="text-gray-300 mb-8 max-w-md mx-auto">
                         Sign in to access your library and playlists
@@ -65,9 +73,8 @@ const AppleMusicHome = () => {
                 </div>
             ) : userError ? (
                 <div className="text-red-500 text-center py-8">
-                    <p>{userError}</p>
                     <button
-                        onClick={() => window.location.reload()}
+                        onClick={() => refetch()}
                         className="mt-4 px-4 py-2 bg-red-500/20 rounded-full text-sm
                             hover:bg-red-500/30 transition-colors"
                     >

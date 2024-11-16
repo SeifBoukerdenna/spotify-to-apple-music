@@ -14,8 +14,8 @@ export const ModeToggle = ({ mode, onToggle }: ModeToggleProps) => {
             onClick={onToggle}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`fixed top-4 right-4 z-50 flex items-center gap-2 px-5 py-2.5 rounded-full
-                 shadow-lg transition-colors duration-300 ${mode === MusicMode.Spotify
+            className={`fixed top-4 right-4 z-50 flex justify-center items-center gap-2 px-5 py-2.5 rounded-full
+             shadow-lg transition-colors duration-300 min-w-[150px] ${mode === MusicMode.Spotify
                     ? "bg-gradient-to-r from-[#fc3c44] to-[#ff2d55] text-white hover:from-[#ff2d55] hover:to-[#fc3c44]"
                     : "bg-gradient-to-r from-[#1DB954] to-[#1ed760] text-white hover:from-[#1ed760] hover:to-[#1DB954]"
                 }`}
@@ -25,9 +25,6 @@ export const ModeToggle = ({ mode, onToggle }: ModeToggleProps) => {
             ) : (
                 <FaSpotify className="text-xl" />
             )}
-            <span className="font-semibold whitespace-nowrap">
-                Switch to {mode === MusicMode.Spotify ? "Apple Music" : "Spotify"}
-            </span>
         </motion.button>
     );
 };

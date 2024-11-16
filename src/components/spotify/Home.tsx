@@ -11,6 +11,7 @@ import SortingFilteringControls from "./SortingFilteringControls";
 import { LikedSongsCard } from "../playlists/LikedSongsCard";
 import { PlaylistGrid } from "../playlists/PlaylistGrid";
 import { useSpotifyToken } from "../../hooks/useSpotifyToken";
+import { FaSpotify } from "react-icons/fa";
 
 const Home = () => {
     const navigate = useNavigate();
@@ -42,6 +43,31 @@ const Home = () => {
         !!token
     );
 
+    if (!token) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-800 to-black">
+                <div className="text-center px-4">
+                    <FaSpotify className="w-24 h-24 mx-auto mb-6 text-green-500" />
+                    <h2 className="text-3xl font-bold text-white mb-6">Connect to Spotify</h2>
+                    <p className="text-gray-300 mb-8 max-w-md mx-auto">
+                        Sign in to access your library and playlists
+                    </p>
+                    <button
+                        onClick={handleLogin}
+                        className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full
+                            font-semibold hover:from-green-600 hover:to-green-700 transform transition-all
+                            duration-300 hover:scale-105"
+                    >
+                        Connect to Spotify
+                    </button>
+                    {authError && (
+                        <p className="mt-4 text-red-500">Error: {authError}</p>
+                    )}
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="bg-gray-900 text-white min-h-screen p-12 font-sans">
             <HomeHeader
@@ -53,7 +79,9 @@ const Home = () => {
 
             {isUserLoading && <LoadingSpinner />}
             {userError && (
-                <p className="text-center">Error fetching user information.</p>
+                <p className="text-center">
+                    {userError instanceof Error ? userError.message : 'An error occurred'}
+                </p>
             )}
 
             {user && (
@@ -74,7 +102,9 @@ const Home = () => {
             {isLoading ? (
                 <LoadingSpinner />
             ) : error ? (
-                <p className="text-center">Error fetching playlists.</p>
+                <p className="text-center">
+                    {error instanceof Error ? error.message : 'An error occurred'}
+                </p>
             ) : (
                 <div>
                     <h2 className="text-center text-xl mt-8">Your Playlists</h2>
