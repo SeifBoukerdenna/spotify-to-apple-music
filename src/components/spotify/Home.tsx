@@ -89,7 +89,7 @@ const Home = () => {
                     <UserInfo user={user} />
                     <div className="text-center mt-5">
                         <button
-                            onClick={() => navigate("/create-playlist")}
+                            onClick={() => navigate("/spotify/create-playlist")}
                             className="bg-green-500 text-white rounded-full px-5 py-2 mt-2
                        cursor-pointer hover:bg-green-400 transition-colors"
                         >
@@ -128,7 +128,7 @@ const Home = () => {
                         {user?.images && user.images.length > 0 && !searchTerm && (
                             <LikedSongsCard
                                 userImage={user.images[0].url}
-                                onNavigate={() => navigate("/liked-songs")}
+                                onNavigate={() => navigate("/spotify/liked-songs")}
                                 onDownload={handleLikedSongsDownload}
                             />
                         )}

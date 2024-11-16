@@ -1,10 +1,18 @@
 // components/appleMusic/AppleMusicLibrary.tsx
 import { useAppleMusicLibrary } from '../../hooks/useAppleMusicLibrary';
+import { useAppleMusicDownload } from '../../hooks/useAppleMusicDownload';
 import { AppleMusicPlaylistCard } from './AppleMusicPlaylistCard';
 import LoadingSpinner from '../spotify/LoadingSpinner';
 
 export const AppleMusicLibrary = () => {
-    const { playlists, isLoading, error } = useAppleMusicLibrary();
+    const { playlists, isLoading, error, musicKitInstance } = useAppleMusicLibrary();
+    const { handlePlaylistDownload } = useAppleMusicDownload();
+
+    const handleDownload = async (playlist: MusicKit.Resource<MusicKit.PlaylistAttributes>) => {
+        if (musicKitInstance) {
+            await handlePlaylistDownload(playlist, musicKitInstance);
+        }
+    };
 
     if (isLoading) return <LoadingSpinner color="#fc3c44" />;
     if (error) return <div className="text-red-500 text-center">{error}</div>;
@@ -14,7 +22,11 @@ export const AppleMusicLibrary = () => {
             <h2 className="text-2xl font-bold text-white mb-6">Your Library</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                 {playlists.map((playlist) => (
-                    <AppleMusicPlaylistCard key={playlist.id} playlist={playlist} />
+                    <AppleMusicPlaylistCard
+                        key={playlist.id}
+                        playlist={playlist}
+                        onDownload={handleDownload}
+                    />
                 ))}
             </div>
         </div>

@@ -23,7 +23,7 @@ const PlaylistItem = ({ playlist, onDownload }: PlaylistItemProps) => {
     return (
         <div
             className="aspect-square group relative rounded-xl overflow-hidden bg-gray-900 cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-green-500/20"
-            onClick={() => navigate(`/playlist/${playlist.id}`)}
+            onClick={() => navigate(`/spotify/playlist/${playlist.id}`)}
         >
             {/* Background Image with Overlay */}
             <div className="absolute inset-0">

@@ -95,7 +95,7 @@ const AppleMusicHome = () => {
             {/* Create Playlist Button */}
             <div className="text-center mt-8">
                 <button
-                    onClick={() => navigate("/create-playlist")}
+                    onClick={() => navigate("/apple-music/create-playlist")}
                     className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-red-500
                         to-pink-600 text-white rounded-full font-medium hover:from-red-600
                         hover:to-pink-700 transition-colors"

@@ -17,6 +17,8 @@ export interface AppleMusicTrack {
       id: string;
       kind: string;
     };
+    releaseDate?: string;
+    trackNumber?: number;
   };
 }
 
@@ -84,5 +86,6 @@ export const useAppleMusicLibrary = () => {
     isLoading,
     error,
     getPlaylistTrackCount,
+    musicKitInstance,
   };
 };
