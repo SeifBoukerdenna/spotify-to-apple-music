@@ -1,3 +1,4 @@
+// hooks/useMusicKit.ts
 import { useState, useEffect } from "react";
 import { API_URL } from "../config";
 
@@ -11,6 +12,7 @@ export const useMusicKit = () => {
   const [musicKitInstance, setMusicKitInstance] =
     useState<MusicKit.MusicKitInstance | null>(null);
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const [isInitialized, setIsInitialized] = useState<boolean>(false);
 
   useEffect(() => {
     const initializeMusicKit = async () => {
@@ -30,13 +32,20 @@ export const useMusicKit = () => {
           },
         });
 
-        const music = window.MusicKit.getInstance();
-        setMusicKitInstance(music);
-        setIsAuthorized(music.isAuthorized);
+        const instance = window.MusicKit.getInstance();
 
-        if (!music.isAuthorized) {
+        // Set the storefront (required for search)
+        if (!instance.api.storefronts.currentStorefront) {
+          instance.api.storefronts.currentStorefront = "us"; // Default to US storefront
+        }
+
+        setMusicKitInstance(instance);
+        setIsAuthorized(instance.isAuthorized);
+        setIsInitialized(true);
+
+        if (!instance.isAuthorized) {
           try {
-            await music.authorize();
+            await instance.authorize();
             setIsAuthorized(true);
           } catch (error) {
             console.error("Authorization failed:", error);
@@ -52,6 +61,7 @@ export const useMusicKit = () => {
     } else {
       const script = document.createElement("script");
       script.src = "https://js-cdn.music.apple.com/musickit/v1/musickit.js";
+      script.async = true;
       script.onload = initializeMusicKit;
       document.head.appendChild(script);
     }
@@ -82,6 +92,7 @@ export const useMusicKit = () => {
   return {
     musicKitInstance,
     isAuthorized,
+    isInitialized,
     handleAuthorize,
     handleUnauthorize,
   };

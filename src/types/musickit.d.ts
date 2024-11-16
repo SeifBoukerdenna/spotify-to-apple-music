@@ -10,6 +10,9 @@ declare namespace MusicKit {
     /** The music user token obtained after authorization. */
     musicUserToken: string;
 
+    /** The developer token used for API requests */
+    developerToken: string;
+
     /**
      * Authorizes the user with Apple Music, returning a music user token.
      * @returns {Promise<string>} A promise that resolves to the music user token.
@@ -66,23 +69,81 @@ declare namespace MusicKit {
    */
   interface Api {
     library: {
-      /**
-       * Retrieves the playlists in the user's Apple Music library.
-       * @returns {Promise<Resource<Playlist>[]>} A promise that resolves to an array of Playlist resources.
-       */
       playlists(): Promise<Resource<PlaylistAttributes>[]>;
+      songs: {
+        all(): Promise<Resource<TrackAttributes>[]>;
+      };
+      add(
+        options: { songs: string[] } | { playlists: string[] }
+      ): Promise<void>;
+      search(term: string, options: SearchOptions): Promise<SearchResponse>;
     };
+    catalog: {
+      songs(ids: string[]): Promise<Resource<TrackAttributes>[]>;
+      search(term: string, options: SearchOptions): Promise<SearchResponse>;
+    };
+    playlists: {
+      create(
+        attributes: PlaylistCreationAttributes
+      ): Promise<Resource<PlaylistAttributes>>;
+      addTracks(playlistId: string, tracks: TrackAddition[]): Promise<void>;
+    };
+    storefronts: {
+      currentStorefront: string;
+    };
+    users: {
+      currentUserLibrary?: {
+        albums?: { total: number };
+        playlists?: { total: number };
+        songs?: { total: number };
+      };
+    };
+  }
+
+  interface SearchOptions {
+    types: string[];
+    limit?: number;
+  }
+
+  interface SearchResponse {
+    songs?: {
+      data: Resource<TrackAttributes>[];
+      next?: string;
+    };
+  }
+
+  interface SearchResponse {
+    songs?: {
+      data: Resource<TrackAttributes>[];
+      next?: string;
+    };
+  }
+
+  interface PlaylistCreationAttributes {
+    name: string;
+    description?: string;
+    tracks?: TrackAddition[];
+  }
+
+  interface TrackAddition {
+    id: string;
+    type: "songs";
   }
 
   interface TrackAttributes {
     name: string;
     artistName: string;
     albumName: string;
-    artwork: Artwork;
+    artwork: {
+      url: string;
+      width: number;
+      height: number;
+    };
     playParams: {
       id: string;
       kind: string;
     };
+    // Add any other attributes you receive from the API
   }
 
   /**

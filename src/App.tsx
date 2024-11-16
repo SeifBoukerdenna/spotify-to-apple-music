@@ -11,6 +11,7 @@ import CreatePlaylist from "./components/spotify/CreatePlaylist";
 import PlaylistDetail from "./components/spotify/PlaylistDetail";
 import { MusicMode } from "./enums/musicMode";
 import { AppLayout } from "./components/layout/AppLayout";
+import AppleMusicCreatePlaylist from "./components/appleMusic/AppleMusicCreatePlaylist";
 
 // Create a wrapper component that will have access to navigation
 const AppContent = () => {
@@ -42,6 +43,7 @@ const AppContent = () => {
           ) : (
             <>
               <Route path="/" element={<AppleMusicHome />} />
+              <Route path="/create-playlist" element={<AppleMusicCreatePlaylist />} />
               <Route path="*" element={<AppleMusicHome />} />
             </>
           )}

@@ -5,4 +5,7 @@ export interface SpotifyUser {
   followers: { total: number };
   country: string;
   external_urls: { spotify: string };
+  playlists?: { total: number };
+  savedTracks?: { total: number };
+  product: "free" | "premium";
 }
