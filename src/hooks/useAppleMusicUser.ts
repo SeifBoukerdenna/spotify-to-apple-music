@@ -2,15 +2,16 @@
 import { useState, useEffect } from "react";
 import { useMusicKit } from "./useMusicKit";
 
-interface LibraryStats {
-  songs: number;
-  playlists: number;
-  albums: number;
-}
-
 export interface AppleMusicUser {
+  id: string;
   storefront: string;
-  stats: LibraryStats;
+  name: string;
+  imageUrl?: string;
+  stats: {
+    songs: number;
+    playlists: number;
+    albums: number;
+  };
   subscription: {
     isActive: boolean;
     type: string;
@@ -31,35 +32,71 @@ export const useAppleMusicUser = () => {
       }
 
       try {
-        // Initialize library stats with default values
-        const stats: LibraryStats = {
-          songs: 0,
-          playlists: 0,
-          albums: 0,
-        };
+        // Fetch all data in parallel
+        const [songsResponse, playlistsResponse, albumsResponse] =
+          await Promise.all([
+            fetch("https://api.music.apple.com/v1/me/library/songs?limit=1", {
+              headers: {
+                Authorization: `Bearer ${musicKitInstance.developerToken}`,
+                "Music-User-Token": musicKitInstance.musicUserToken,
+              },
+            }),
+            fetch(
+              "https://api.music.apple.com/v1/me/library/playlists?limit=1",
+              {
+                headers: {
+                  Authorization: `Bearer ${musicKitInstance.developerToken}`,
+                  "Music-User-Token": musicKitInstance.musicUserToken,
+                },
+              }
+            ),
+            fetch("https://api.music.apple.com/v1/me/library/albums?limit=1", {
+              headers: {
+                Authorization: `Bearer ${musicKitInstance.developerToken}`,
+                "Music-User-Token": musicKitInstance.musicUserToken,
+              },
+            }),
+          ]);
 
-        // Get playlists count
+        // Process all responses in parallel
+        const [songsData, playlistsData, albumsData] = await Promise.all([
+          songsResponse.ok ? songsResponse.json() : { meta: { total: 0 } },
+          playlistsResponse.ok
+            ? playlistsResponse.json()
+            : { meta: { total: 0 } },
+          albumsResponse.ok ? albumsResponse.json() : { meta: { total: 0 } },
+        ]);
+
+        // Try to get user name from authorization
+        let userName = "Apple Music User";
         try {
-          const playlists = await musicKitInstance.api.library.playlists();
-          stats.playlists = playlists.length;
-        } catch (e) {
-          console.warn("Failed to fetch playlists count:", e);
+          const authResult = await musicKitInstance.authorize();
+          if (authResult && typeof authResult === "string") {
+            userName = authResult;
+            localStorage.setItem("apple_music_name", userName);
+          }
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+          const storedName = localStorage.getItem("apple_music_name");
+          if (storedName) {
+            userName = storedName;
+          }
         }
 
-        // Get songs count if available
-        try {
-          const songs = await musicKitInstance.api.library.songs.all();
-          stats.songs = songs.length;
-        } catch (e) {
-          console.warn("Failed to fetch songs count:", e);
-        }
-
-        // Create user info with available data
         const userInfo: AppleMusicUser = {
-          storefront: "us", // Default to 'us' since storefront might not be directly accessible
-          stats,
+          id: musicKitInstance.musicUserToken,
+          storefront:
+            musicKitInstance.api.storefronts.currentStorefront || "us",
+          name: userName,
+          imageUrl:
+            localStorage.getItem("apple_music_profile_image") || undefined,
+          stats: {
+            songs: songsData.meta?.total || 0,
+            playlists: playlistsData.meta?.total || 0,
+            albums: albumsData.meta?.total || 0,
+          },
           subscription: {
-            isActive: true, // We can assume active if authorized
+            isActive: true,
             type: "Apple Music",
           },
         };

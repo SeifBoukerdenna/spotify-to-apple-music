@@ -100,6 +100,20 @@ declare namespace MusicKit {
     };
   }
 
+  interface AccountAttributes {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  }
+
+  interface AccountResponse {
+    data: Array<{
+      id: string;
+      type: string;
+      attributes: AccountAttributes;
+    }>;
+  }
+
   interface SearchOptions {
     types: string[];
     limit?: number;
